@@ -20,40 +20,20 @@ const MongoClient = require('mongodb').MongoClient;
 const url = require("../global/db_url").art;
 const handler = require("./srv_files/handler").handle;
 const connection = require("../global/connection");
-const gameRooms = require("./srv_files/game/room");
 
-const Analyse = {
-    connnected: 0,
-    total: 0
-};
-
-const server = http.createServer(handler).listen(7999, "localhost");
+const server = http.createServer(handler).listen(8069, "localhost");
 
 const io = require('socket.io')(server);
 
 MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
     if (err) throw err;
-    let dbo = db.db("art");
+	let dbo = db.db("art");
 
-    function entierAleatoire(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
 	io.on('connection', function (socket) {
-		Analyse.connnected++;
-		Analyse.total++;
-
-		socket.userCo = (socket) => {
-			return (socket.hasOwnProperty("psd"));
-		}
-	
+		
 		connection.setupEvents(socket, dbo);
-		gameRooms.setupEvents(socket, dbo);
 
-		socket.on("connections", (str)=>{
-			socket.emit("log1", Analyse);
-		});
-
-		socket.on("MAJ", txt=> {
+		socket.on("MAJ", txt=> { // pour les mises a jour critiques du site -> refresh de force pour les utilisateurs :)
 			if (socket.psd == "Redz") {
 				socket.broadcast.emit("MAJ", txt);
 				socket.emit("MAJ", txt);
@@ -63,15 +43,9 @@ MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
 		});
 	
 		socket.on("disconnect", ()=>{
-			Analyse.connnected--;
-			if (!socket.hasOwnProperty("psd")) {
-				return ;
-			}
-			if (socket.hasOwnProperty("gameRoom")) {
-				socket.gameRoom.kick(socket.psd);
-			}
+			
 		});
 	});
 });
 
-console.log("online at : http://localhost:7999");
+console.log("online at : http://localhost:8069");

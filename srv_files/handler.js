@@ -48,7 +48,7 @@ function handler(request, response) {
     }
 
     const contentType = mimeTypes[extname] || 'application/octet-stream';
-    if (/srv/.test(filePath) || /draw.js/.test(filePath)) {
+    if (/srv/.test(filePath) || /vroum.js/.test(filePath)) {
         fs.readFile('./403.html', function(error, content) {
             response.writeHead(403, {
                 'Content-Type': 'text/html'

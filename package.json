@@ -1,0 +1,21 @@
+{
+  "name": "vroum",
+  "version": "1.0.0",
+  "description": "simple car racing game",
+  "main": "vroum.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "web@renouv.art:vroum"
+  },
+  "author": "LE MONIES DE SAGAZAN Mayeul - VIDAL Corentin",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "http": "0.0.1-security",
+    "mongodb": "^3.5.9",
+    "socket.io": "^2.3.0"
+  }
+}
