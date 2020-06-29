@@ -1,0 +1,7 @@
+body {
+	margin: 0px;
+}
+
+canvas {
+	display: block; /* fix necessary to remove space at bottom of canvas */
+}
