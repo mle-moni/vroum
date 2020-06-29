@@ -27,20 +27,13 @@ scene.add(rect);
 ambientLight = new THREE.AmbientLight(0x404040, 5);
 scene.add(ambientLight);
 
-// directionalLight = new THREE.DirectionalLight(0xffffff,100);
-// directionalLight.position.set(0,1,0);
-// directionalLight.castShadow = true;
-// scene.add(directionalLight);
 light = new THREE.PointLight(0xc4c4c4, 8);
 light.position.set(0,400,0);
 scene.add(light);
 
-
-const models = [];
-
 const world = {
 	prototypes: [],
-	models: {
+	actors: {
 		player: null
 	},
 	camera,
@@ -49,7 +42,7 @@ const world = {
 
 let loader = new THREE.GLTFLoader();
 loader.load("/srcs/models/red_car.glb", function(gltf){
-  car = gltf.scene;
+  const car = gltf.scene;
   let s = 10;
   car.scale.set(s, s, s);
   world.prototypes["red_car"] = car;
@@ -57,13 +50,14 @@ loader.load("/srcs/models/red_car.glb", function(gltf){
 });
 
 function startGame(world) {
-	player = world.prototypes["red_car"].clone();
-	player.position.set(0, 0, -100);
-	player.add(camera);
+	player = new Car("red_car", world.prototypes);
+	
+	player.model.position.set(0, 0, -100);
+	player.model.add(camera);
 	
 	camera.position.set(0, 5, 10);
-	world.models.player = player;
-	scene.add(world.models.player);
+	world.actors.player = player;
+	scene.add(world.actors.player.model);
 
 	animate();
 }

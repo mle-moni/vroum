@@ -1,29 +1,29 @@
 function updateGame(world) {
-	const player = world.models.player;
+	const playerModel = world.actors.player.model;
+
 	if (keyboard.right) {
-		player.rotation.y -= 0.02;
+		world.actors.player.physics.goRight();
 	}
 	if (keyboard.left) {
-		player.rotation.y += 0.02;
+		world.actors.player.physics.goLeft();
 	}
 	if (keyboard.up) {
-		player.position.z -= Math.cos(player.rotation.y);
-		player.position.x -= Math.sin(player.rotation.y);
+		world.actors.player.physics.accelerate();
 	}
 	if (keyboard.down) {
-		player.position.z += Math.cos(player.rotation.y);
-		player.position.x += Math.sin(player.rotation.y);
+		world.actors.player.physics.reverseGear();
 	}
+	world.actors.player.physics.updatePos();
 	if (keyboard.lockCamera) {
 		camLock = !camLock;
 		if (camLock) {
-			world.models.player.add(world.camera);
+			playerModel.add(world.camera);
 			world.camera.position.set(0, 5, 10);
 		} else {
-			world.models.player.remove(world.camera);
+			playerModel.remove(world.camera);
 			world.camera.position.set(0, 100, 0);
 		}
 		keyboard.lockCamera = false;
 	}
-	world.camera.lookAt(player.position);
+	world.camera.lookAt(playerModel.position);
 }
