@@ -3,6 +3,8 @@ scene.background = new THREE.Color(0xdddddd);
 
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight);
 
+let camLock = true;
+
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(innerWidth, innerHeight);
 document.body.append(renderer.domElement);
@@ -22,14 +24,17 @@ rect.position.set(10, 0, -150);
 scene.add(cube);
 scene.add(rect);
 
-ambientLight = new THREE.AmbientLight(0x404040,100);
+ambientLight = new THREE.AmbientLight(0x404040, 5);
 scene.add(ambientLight);
 
-hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
-hemiLight.color.setHSL(0.6, 1, 0.6);
-hemiLight.groundColor.setHSL(0.095, 1, 0.75);
-hemiLight.position.set(0, 50, 0);
-scene.add(hemiLight);
+// directionalLight = new THREE.DirectionalLight(0xffffff,100);
+// directionalLight.position.set(0,1,0);
+// directionalLight.castShadow = true;
+// scene.add(directionalLight);
+light = new THREE.PointLight(0xc4c4c4, 8);
+light.position.set(0,400,0);
+scene.add(light);
+
 
 const models = [];
 

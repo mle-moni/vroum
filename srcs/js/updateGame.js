@@ -14,5 +14,16 @@ function updateGame(world) {
 		player.position.z += Math.cos(player.rotation.y);
 		player.position.x += Math.sin(player.rotation.y);
 	}
+	if (keyboard.lockCamera) {
+		camLock = !camLock;
+		if (camLock) {
+			world.models.player.add(world.camera);
+			world.camera.position.set(0, 5, 10);
+		} else {
+			world.models.player.remove(world.camera);
+			world.camera.position.set(0, 100, 0);
+		}
+		keyboard.lockCamera = false;
+	}
 	world.camera.lookAt(player.position);
 }
