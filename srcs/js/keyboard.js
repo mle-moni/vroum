@@ -2,7 +2,13 @@ const defActions = {
 	up: "ArrowUp",
 	down: "ArrowDown",
 	left: "ArrowLeft",
-	right: "ArrowRight"
+	right: "ArrowRight",
+	w: "KeyW",
+	a: "KeyA",
+	s: "KeyS",
+	d: "KeyD",
+	r: "KeyR",
+	f: "KeyF"
 };
 
 const defToggles = {
@@ -20,7 +26,13 @@ const keyboard = {
 	down: false,
 	left: false,
 	right: false,
-	lockCamera: false
+	lockCamera: false,
+	w: false,
+	a: false,
+	s: false,
+	d: false,
+	r: false,
+	f: false
 };
 
 document.onkeydown = e => {

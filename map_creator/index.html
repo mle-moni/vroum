@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>MAP CREATOR</title>
+    <style>
+		#cont {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+		}
+        .tile {
+            margin-right: 3px;
+            border: solid;
+            cursor: pointer;
+        }
+        .tools {
+            margin: 5px;
+            display: inline;
+            font-size: 40px;
+        }
+        html {
+            user-select: none;
+		}
+		body {
+			margin: 0px;
+		}
+		canvas {
+			display: block; /* fix necessary to remove space at bottom of canvas */
+		}
+		#canvas {
+			position: absolute;
+			top: 0px;
+			right: 0px;
+		}
+	</style>
+	<script>
+        let map = {
+			title: "",
+			colors: [],
+			array: [],
+			tileScale: 100
+		};
+		let lookAt = null;
+		let mapLoader = null;
+		let world = null;
+		let pin = null;
+		let pinPos = {x: 0, y: 0};
+    </script>
+    <script src="/libs/three.min.js"></script>
+    <script src="/libs/GLTFLoader.js"></script>
+	<script src="/srcs/js/keyboard.js"></script>
+	<script src="/map_creator/js/load.js"></script>
+	<script src="/map_creator/js/draw.js"></script>
+	<script src="/map_creator/js/copy_to_clipboard.js"></script>
+	<script src="/map_creator/js/new_map.js"></script>
+</head>
+
+<body>
+	<div id="cont" >
+		<img id="pin" style="border: solid;" class="tools">
+        <div id="cp" onclick="copy()" style="cursor: pointer; color: #f4acb7;" class="tools">
+            Export
+        </div>
+        <div id="load" class="tools" onclick="load()" style="cursor: pointer; color: #84a59d;">Import</div>
+        <div id="new" class="tools" onclick="new_map()" style="cursor: pointer; color: #f28482;">New</div>
+    </div>
+    <canvas id="canvas" width="400" height="400"></canvas>
+	<script src="/map_creator/js/mini_map.js"></script>
+	<script src="/srcs/js/game_engine/MapLoader.js"></script>
+	<script src="/map_creator/js/create_scene.js"></script>
+</body>
+
+</html>
