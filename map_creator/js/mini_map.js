@@ -5,10 +5,16 @@ const ctx = canvas.getContext("2d");
 	get sub array of 20*20 tiles from pinPos
 	we assume that the reference array is at least 20*20
 */
-function getSubarray(arr, offset) {
+function getSubarray(arr) {
 	const subarr = [];
-	let x = pinPos.x;
-	let y = pinPos.y;
+	let x = pinPos.x - 10;
+	let y = pinPos.y - 10;
+	if (x < 0) {
+		x = 0;
+	}
+	if (y < 0) {
+		y = 0;
+	}
 	if (y + 20 > arr.length) {
 		y = arr.length - 20;
 	}
@@ -27,9 +33,8 @@ setInterval(()=>{
 	if (map.array.length === 0) {
 		return ;
 	}
-	let offset = {x: 0, y: 0};
-	const colors = ["#7e6cd9", "#90a395", "#b0985a"];
-	let subArray = getSubarray(map.array, offset);
+	const colors = ["#7e6cd9", "#90a395", "#b0985a", "#9e2a2b"];
+	let subArray = getSubarray(map.array);
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 

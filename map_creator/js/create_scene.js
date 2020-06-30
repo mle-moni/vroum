@@ -24,7 +24,6 @@ world = {
 };
 
 mapLoader = new MapLoader(world);
-mapLoader.load(map.array);
 
 const sphereGeometry = new THREE.SphereGeometry( 50, 320, 320 );
 pin = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial({color: 0xf28482}));
@@ -72,31 +71,36 @@ function updateGame(world) {
 		world.camera.position.y -= 30;
 	}
 	if (keyboard.w) {
+		if (pinPos.y > 0) {
+			pinPos.y--;
+		}
+	}
+	if (keyboard.s) {
+		if (pinPos.y < map.array.length - 1) {
+			pinPos.y++;
+		}
+	}
+	if (keyboard.a) {
+		if (pinPos.x > 0) {
+			pinPos.x--;
+		}
+	}
+	if (keyboard.d) {
 		if (map.array.length !== 0) {
 			if (pinPos.x < map.array[0].length - 1) {
 				pinPos.x++;
 			}
 		}
 	}
-	if (keyboard.s) {
-		if (pinPos.x > 0) {
-			pinPos.x--;
-		}
-	}
-	if (keyboard.a) {
-		if (pinPos.y > 0) {
-			pinPos.y--;
-		}
-	}
-	if (keyboard.d) {
-		if (pinPos.y < map.array.length - 1) {
-			pinPos.y++;
-		}
+	if (keyboard.lockCamera) {
+		world.camera.lookAt(pin.position);
+		world.camera.rotation.x = 0;
+		world.camera.rotation.z = 0;
+		keyboard.lockCamera = false;
 	}
 	pin.position.set(
 		pinPos.x * map.tileScale,
 		40,
 		pinPos.y * map.tileScale
 	);
-	// world.camera.lookAt(lookAt);
 }

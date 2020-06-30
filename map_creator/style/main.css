@@ -1,0 +1,31 @@
+@import "tools.css";
+
+#cont {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+.tile {
+	margin-right: 3px;
+	border: solid;
+	cursor: pointer;
+}
+.optionBar {
+	margin: 5px;
+	display: inline;
+	font-size: 40px;
+}
+html {
+	user-select: none;
+}
+body {
+	margin: 0px;
+}
+canvas {
+	display: block; /* fix necessary to remove space at bottom of canvas */
+}
+#canvas {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}

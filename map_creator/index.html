@@ -4,45 +4,15 @@
 <head>
     <meta charset="utf-8">
     <title>MAP CREATOR</title>
-    <style>
-		#cont {
-			position: absolute;
-			top: 0px;
-			left: 0px;
-		}
-        .tile {
-            margin-right: 3px;
-            border: solid;
-            cursor: pointer;
-        }
-        .tools {
-            margin: 5px;
-            display: inline;
-            font-size: 40px;
-        }
-        html {
-            user-select: none;
-		}
-		body {
-			margin: 0px;
-		}
-		canvas {
-			display: block; /* fix necessary to remove space at bottom of canvas */
-		}
-		#canvas {
-			position: absolute;
-			top: 0px;
-			right: 0px;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="/map_creator/style/main.css">
 	<script>
         let map = {
 			title: "",
-			colors: [],
 			array: [],
 			tileScale: 100
 		};
-		let lookAt = null;
+		let tampon = 2;
+		let offset = {x: 0, y: 0};
 		let mapLoader = null;
 		let world = null;
 		let pin = null;
@@ -51,25 +21,50 @@
     <script src="/libs/three.min.js"></script>
     <script src="/libs/GLTFLoader.js"></script>
 	<script src="/srcs/js/keyboard.js"></script>
-	<script src="/map_creator/js/load.js"></script>
+	<script src="/map_creator/js/importMap.js"></script>
 	<script src="/map_creator/js/draw.js"></script>
-	<script src="/map_creator/js/copy_to_clipboard.js"></script>
-	<script src="/map_creator/js/new_map.js"></script>
+	<script src="/map_creator/js/exportMap.js"></script>
+	<script src="/map_creator/js/newMap.js"></script>
 </head>
 
 <body>
 	<div id="cont" >
-		<img id="pin" style="border: solid;" class="tools">
-        <div id="cp" onclick="copy()" style="cursor: pointer; color: #f4acb7;" class="tools">
+		<img id="pin" style="border: solid;" class="optionBar">
+        <div id="cp" onclick="exportMap()" style="cursor: pointer; color: #f4acb7;" class="optionBar">
             Export
         </div>
-        <div id="load" class="tools" onclick="load()" style="cursor: pointer; color: #84a59d;">Import</div>
-        <div id="new" class="tools" onclick="new_map()" style="cursor: pointer; color: #f28482;">New</div>
-    </div>
-    <canvas id="canvas" width="400" height="400"></canvas>
+        <div id="load" class="optionBar" onclick="importMap()" style="cursor: pointer; color: #84a59d;">Import</div>
+        <div id="new" class="optionBar" onclick="newMap()" style="cursor: pointer; color: #f28482;">New map</div>
+        <a id="new" class="optionBar" href="https://redztwist.gitbook.io/renouv-art" style="cursor: pointer; color: #cd9777;">How to use</a>
+	</div>
+	<div class="tools transparent" id="toolsPanel" oncontextmenu="return false">
+		<div class="colors" id="colors">
+			<div class="color" color="#7e6cd9" tileID="0"></div>
+			<div class="color" color="#90a395" tileID="1"></div>
+			<div class="color" color="#b0985a" tileID="2"></div>
+			<div class="color" color="#9e2a2b" tileID="3"></div>
+		</div>
+		<!-- <br>
+		<div class="penSize" id="penSize">
+			<div class="sizes" id="sizes">
+				<div class="size" size="1"><span></span></div>
+				<div class="size" size="5"><span></span></div>
+				<div class="size" size="10"><span></span></div>
+				<div class="size" size="15"><span></span></div>
+			</div>
+		</div>
+		<br>
+		<div class="reset" id="reset">
+			<span>RESET</span>
+		</div> -->
+	</div>
+	<canvas id="canvas" width="400" height="400"></canvas>
+
+	<script src="/map_creator/js/toolBox.js"></script>
 	<script src="/map_creator/js/mini_map.js"></script>
 	<script src="/srcs/js/game_engine/MapLoader.js"></script>
 	<script src="/map_creator/js/create_scene.js"></script>
+	<script src="/map_creator/js/mini_map_drawing.js"></script>
 </body>
 
 </html>

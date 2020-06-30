@@ -1,7 +1,7 @@
 // stringify "map" and copy it into the clipboard  
 
-function copy() {
-	let str = JSON.stringify(map);
+function exportMap() {
+	let str = `const ${map.title} = ` + JSON.stringify(map) + ";";
 	copyToClipboard(str);
 }
 
