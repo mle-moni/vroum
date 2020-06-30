@@ -1,44 +1,73 @@
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xdddddd);
+
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight);
+
+let camLock = true;
+
+// we will use this to get the delta time
+const clock = new THREE.Clock();
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(innerWidth, innerHeight);
 document.body.append(renderer.domElement);
 
-const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
-const rectGeometry = new THREE.BoxGeometry(100, 10, 10);
+ambientLight = new THREE.AmbientLight(0x404040, 5);
+scene.add(ambientLight);
 
-const redMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
-const greenMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
-const blueMaterial = new THREE.MeshBasicMaterial({color: 0x0000ff});
-
-const player = new THREE.Mesh(cubeGeometry, redMaterial);
-const cube = new THREE.Mesh(cubeGeometry, blueMaterial);
-const rect = new THREE.Mesh(rectGeometry, greenMaterial);
-
-cube.position.set(10, 0, -110);
-rect.position.set(10, 0, -150);
-
-player.position.z = -100;
-player.add(camera);
-camera.position.set( 0, 50, 100 );
-
-
-scene.add(player);
-scene.add(cube);
-scene.add(rect);
+light = new THREE.PointLight(0xc4c4c4, 8);
+light.position.set(0,4000,0);
+scene.add(light);
 
 const world = {
-	models: {
-		player
+	prototypes: [],
+	actors: {
+		player: null
 	},
-	camera
+	camera,
+	scene,
+	clock,
+	defaultPos: {x: 0, y: 0, z: 0}
 };
 
-const animate = () => {
-	updateGame(world);
+const mapLoader = new MapLoader(world);
+mapLoader.load(map1);
+
+/*
+	loading 3d models and saving them in word.prototypes
+	so we can easyly create cars with differents skins by cloning the prototypes
+*/
+let loader = new THREE.GLTFLoader();
+loader.load("/srcs/models/red_car.glb", function(gltf){
+	const car = gltf.scene;
+	let s = 10;
+	car.scale.set(s, s, s);
+	world.prototypes["red_car"] = car;
+	startGame(world);
+});
+
+// this function has to be called AFTER loading ALL the 3D models
+function startGame(world) {
+	// creating our player with a red car skin
+	const player = new Car("red_car", world.prototypes);
+	
+	player.model.position.set(
+		world.defaultPos.x,
+		world.defaultPos.y,
+		world.defaultPos.z
+	);
+	// adding camera to player so the camera follows him
+	player.model.add(camera);
+	camera.position.set(0, 5, 10);
+	world.actors.player = player;
+	scene.add(world.actors.player.model);
+
+	animate();
+}
+
+function animate() {
+	let deltaTime = clock.getDelta();
+	updateGame(world, deltaTime);
 	renderer.render(scene, camera);
 	requestAnimationFrame(animate);
 }
-
-animate();
