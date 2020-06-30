@@ -12,30 +12,29 @@ class CarPhysics {
 		this.model.rotation.y -= 0.02;
 	}
 	accelerate(dt) {
-		this.translationSpeed.z -= Math.cos(this.model.rotation.y) / 4;
-		this.translationSpeed.x -= Math.sin(this.model.rotation.y) / 4;
+		this.translationSpeed.z -= (Math.cos(this.model.rotation.y) / 600) * dt;
+		this.translationSpeed.x -= (Math.sin(this.model.rotation.y) / 600) * dt;
 	}
 	reverseGear(dt) {
-		this.translationSpeed.z += Math.cos(this.model.rotation.y) / 15;
-		this.translationSpeed.x += Math.sin(this.model.rotation.y) / 15;
+		this.translationSpeed.z += (Math.cos(this.model.rotation.y) / 2000) * dt;
+		this.translationSpeed.x += (Math.sin(this.model.rotation.y) / 2000) * dt;
 	}
 	reduce(speed, reduce, name) {
-		if (speed > -0.01 && speed < 0.01) {
-			this.translationSpeed[name] = 0;
-			return (0);
+		if (speed < 0.01 && speed > 0.01) {
+			return (speed);
 		}
 		return (this.translationSpeed[name] / reduce);
 	}
 	dragForces(dt) {
-		this.translationSpeed.x -= this.reduce(this.translationSpeed.x, 60, "x");
-		this.translationSpeed.y -= this.reduce(this.translationSpeed.y, 60, "y");
-		this.translationSpeed.z -= this.reduce(this.translationSpeed.z, 60, "z");
+		this.translationSpeed.x -= this.reduce(this.translationSpeed.x, 700, "x") * dt;
+		this.translationSpeed.y -= this.reduce(this.translationSpeed.y, 700, "y") * dt;
+		this.translationSpeed.z -= this.reduce(this.translationSpeed.z, 700, "z") * dt;
 	}
 	updatePos(dt) {
 		this.dragForces(dt);
-		this.model.position.x += this.translationSpeed.x;
-		this.model.position.y += this.translationSpeed.y;
-		this.model.position.z += this.translationSpeed.z;
+		this.model.position.x += this.translationSpeed.x * dt;
+		this.model.position.y += this.translationSpeed.y * dt;
+		this.model.position.z += this.translationSpeed.z * dt;
 		// console.log(this.translationSpeed);
 	}
 }

@@ -66,7 +66,7 @@ function startGame(world) {
 }
 
 function animate() {
-	let deltaTime = clock.getDelta();
+	let deltaTime = clock.getDelta() * 1000;
 	updateGame(world, deltaTime);
 	renderer.render(scene, camera);
 	requestAnimationFrame(animate);
