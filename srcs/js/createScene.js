@@ -5,6 +5,7 @@ const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight);
 // const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 100000);
 
 let camLock = true;
+keyboard.lockCamera = true;
 
 // we will use this to get the delta time
 const clock = new THREE.Clock();

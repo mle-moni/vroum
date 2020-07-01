@@ -19,21 +19,35 @@ function updateGame(world, dt) {
 
 	// lock / unlock camera
 	if (keyboard.lockCamera) {
-		camLock = !camLock;
-		if (camLock) {
+		if (!camLock) {
 			playerModel.add(world.camera);
 			world.camera.position.set(0, 50, 100);
-		} else {
+		}
+		camLock = true;
+	} else {
+		if (camLock) {
 			playerModel.remove(world.camera);
-			world.camera.position.y = 100;
+			world.camera.position.y = 300;
 			world.camera.position.x = world.actors.player.model.position.x;
 			world.camera.position.z = world.actors.player.model.position.z;
 		}
-		keyboard.lockCamera = false;
+		if (dist2dSq(world.camera.position, world.actors.player.model.position) > 10000) {
+			let posDiff = world.camera.position.clone().sub(world.actors.player.model.position);
+
+			world.camera.position.x -= posDiff.x / 70;
+			world.camera.position.z -= posDiff.z / 70;
+		}
+		camLock = false;
 	}
 	if (keyboard.showHitbox) {
 		world.actors.player.toggleHitbox();
 		keyboard.showHitbox = false;
 	}
 	world.camera.lookAt(playerModel.position);
+}
+
+function dist2dSq(obj1, obj2) {
+	let diffX = obj2.x - obj1.x;
+	let diffY = obj2.y - obj1.y;
+	return ((diffX * diffX) + (diffY * diffY));
 }
