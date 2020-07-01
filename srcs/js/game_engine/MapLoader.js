@@ -33,7 +33,7 @@ class MapLoader {
 			this.tiles.push([]);
 			for (let j = 0; j < map.array[i].length; j++) {
 				// 0 is where the player starts, so we need to update world.defaultPos
-				if (map.array[i][j] === 0) {
+				if (map.array[i][j] == 0) {
 					this.world.defaultPos.x = j * this.map.tileScale;
 					this.world.defaultPos.y = 0;
 					this.world.defaultPos.z = i * this.map.tileScale;

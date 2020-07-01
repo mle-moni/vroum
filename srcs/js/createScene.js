@@ -2,6 +2,7 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xdddddd);
 
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight);
+// const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 100000);
 
 let camLock = true;
 
@@ -32,7 +33,7 @@ const world = {
 };
 
 const mapLoader = new MapLoader(world);
-mapLoader.load(map1);
+mapLoader.load(map2);
 
 world.collider = new Collider(mapLoader, world);
 

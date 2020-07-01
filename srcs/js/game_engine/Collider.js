@@ -18,7 +18,10 @@ class Collider {
 				if (refPos.x + j < 0 || refPos.x + j > this.mapLoader.map.array[0].length - 1) {
 					continue ;
 				}
-				tilesArray.push(this.mapLoader.tiles[refPos.y + i][refPos.x + j]);
+				let tile = this.mapLoader.tiles[refPos.y + i][refPos.x + j];
+				if (tile.tileID == 3) {
+					tilesArray.push(tile);
+				}
 			}
 		}
 		return (tilesArray);
@@ -27,6 +30,9 @@ class Collider {
 		const meshArray = this.getCloseTilesInArray(player);
 		let target = new THREE.Vector3();
 
+		if (meshArray.length === 0) {
+			return (null);
+		}
 		for (let i = 0; i < player.hitbox.spheres.length; i++) {
 			player.hitbox.spheres[i].getWorldPosition(target);
 			let position = player.model.position.clone();

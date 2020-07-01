@@ -12,8 +12,10 @@ class CarPhysics {
 		this.model.rotation.y -= 0.02;
 	}
 	accelerate(dt) {
-		this.translationSpeed.z -= (Math.cos(this.model.rotation.y) / 600) * dt;
-		this.translationSpeed.x -= (Math.sin(this.model.rotation.y) / 600) * dt;
+		// increase k to reduce car speed (1000)
+		const k = 1000;
+		this.translationSpeed.z -= (Math.cos(this.model.rotation.y) / k) * dt;
+		this.translationSpeed.x -= (Math.sin(this.model.rotation.y) / k) * dt;
 	}
 	reverseGear(dt) {
 		this.translationSpeed.z += (Math.cos(this.model.rotation.y) / 2000) * dt;
@@ -26,9 +28,11 @@ class CarPhysics {
 		return (this.translationSpeed[name] / reduce);
 	}
 	dragForces(dt) {
-		this.translationSpeed.x -= this.reduce(this.translationSpeed.x, 700, "x") * dt;
-		this.translationSpeed.y -= this.reduce(this.translationSpeed.y, 700, "y") * dt;
-		this.translationSpeed.z -= this.reduce(this.translationSpeed.z, 700, "z") * dt;
+		// reduce k = more ground grip (700)
+		const k = 650;
+		this.translationSpeed.x -= this.reduce(this.translationSpeed.x, k, "x") * dt;
+		this.translationSpeed.y -= this.reduce(this.translationSpeed.y, k, "y") * dt;
+		this.translationSpeed.z -= this.reduce(this.translationSpeed.z, k, "z") * dt;
 	}
 	checkCollisions() {
 		let objCollided = this.car.collider.mapCollision(this.car);

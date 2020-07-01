@@ -34,7 +34,7 @@ class Car {
 		const sphereGeometry = new THREE.SphereGeometry( 2, 30, 30 );
 		const sphereMaterial = new THREE.MeshBasicMaterial({color: 0x0000ff});
 		const spheres = [];
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < 6; i++) {
 			spheres.push(new THREE.Mesh(sphereGeometry, sphereMaterial));
 			this.hitbox.model.add(spheres[i]);
 		}
@@ -42,6 +42,9 @@ class Car {
 		spheres[1].position.set(values.x / 2, 1, -values.z / 2);
 		spheres[2].position.set(-values.x / 2, 1, values.z / 2);
 		spheres[3].position.set(-values.x / 2, 1, -values.z / 2);
+
+		spheres[4].position.set(-values.x / 2, 1, 0);
+		spheres[5].position.set(values.x / 2, 1, 0);
 		// spheres are placed at the edges of the car, we will need more precision later
 
 		return (spheres);
