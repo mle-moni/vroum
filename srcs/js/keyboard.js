@@ -8,11 +8,12 @@ const defActions = {
 	s: "KeyS",
 	d: "KeyD",
 	r: "KeyR",
-	f: "KeyF"
+	f: "KeyF",
 };
 
 const defToggles = {
-	lockCamera: "KeyY"
+	lockCamera: "KeyY",
+	showHitbox: "KeyH"
 };
 
 let actions, toggles;
@@ -32,7 +33,8 @@ const keyboard = {
 	s: false,
 	d: false,
 	r: false,
-	f: false
+	f: false,
+	showHitbox: false
 };
 
 document.onkeydown = e => {

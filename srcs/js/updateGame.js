@@ -22,7 +22,7 @@ function updateGame(world, dt) {
 		camLock = !camLock;
 		if (camLock) {
 			playerModel.add(world.camera);
-			world.camera.position.set(0, 5, 10);
+			world.camera.position.set(0, 50, 100);
 		} else {
 			playerModel.remove(world.camera);
 			world.camera.position.y = 100;
@@ -30,6 +30,10 @@ function updateGame(world, dt) {
 			world.camera.position.z = world.actors.player.model.position.z;
 		}
 		keyboard.lockCamera = false;
+	}
+	if (keyboard.showHitbox) {
+		world.actors.player.toggleHitbox();
+		keyboard.showHitbox = false;
 	}
 	world.camera.lookAt(playerModel.position);
 }

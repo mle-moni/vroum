@@ -43,6 +43,7 @@ class MapLoader {
 				this.tiles[i].push(new THREE.Mesh(geometry, this.materials[ map.array[i][j] ]));
 				this.tiles[i][j].position.x = j * this.map.tileScale;
 				this.tiles[i][j].position.z = i * this.map.tileScale;
+				this.tiles[i][j].tileID = map.array[i][j];
 				this.tiles[i][j].position.y = this.tiles[i][j].geometry.vertices[0].y;
 				// add each tiles to the scene
 				this.world.scene.add(this.tiles[i][j]);
@@ -57,6 +58,7 @@ class MapLoader {
 			geometry = this.cubeGeometry;
 		}
 		this.tiles[y][x] = new THREE.Mesh(geometry, this.materials[tileID]);
+		this.tiles[y][x].tileID = tileID;
 		this.tiles[y][x].position.x = x * this.map.tileScale;
 		this.tiles[y][x].position.z = y * this.map.tileScale;
 		this.tiles[y][x].position.y = this.tiles[y][x].geometry.vertices[0].y;

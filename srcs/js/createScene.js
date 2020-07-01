@@ -27,11 +27,14 @@ const world = {
 	camera,
 	scene,
 	clock,
-	defaultPos: {x: 0, y: 0, z: 0}
+	defaultPos: {x: 0, y: 0, z: 0},
+	collider: null
 };
 
 const mapLoader = new MapLoader(world);
 mapLoader.load(map1);
+
+world.collider = new Collider(mapLoader, world);
 
 /*
 	loading 3d models and saving them in word.prototypes
@@ -40,8 +43,6 @@ mapLoader.load(map1);
 let loader = new THREE.GLTFLoader();
 loader.load("/srcs/models/red_car.glb", function(gltf){
 	const car = gltf.scene;
-	let s = 10;
-	car.scale.set(s, s, s);
 	world.prototypes["red_car"] = car;
 	startGame(world);
 });
@@ -49,7 +50,7 @@ loader.load("/srcs/models/red_car.glb", function(gltf){
 // this function has to be called AFTER loading ALL the 3D models
 function startGame(world) {
 	// creating our player with a red car skin
-	const player = new Car("red_car", world.prototypes);
+	const player = new Car("red_car", world);
 	
 	player.model.position.set(
 		world.defaultPos.x,
@@ -58,7 +59,7 @@ function startGame(world) {
 	);
 	// adding camera to player so the camera follows him
 	player.model.add(camera);
-	camera.position.set(0, 5, 10);
+	camera.position.set(0, 50, 100);
 	world.actors.player = player;
 	scene.add(world.actors.player.model);
 

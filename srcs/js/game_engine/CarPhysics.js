@@ -30,8 +30,20 @@ class CarPhysics {
 		this.translationSpeed.y -= this.reduce(this.translationSpeed.y, 700, "y") * dt;
 		this.translationSpeed.z -= this.reduce(this.translationSpeed.z, 700, "z") * dt;
 	}
+	checkCollisions() {
+		let objCollided = this.car.collider.mapCollision(this.car);
+		if (!objCollided) {
+			return ;
+		}
+		if (objCollided.hasOwnProperty("tileID") && objCollided.tileID == 3 && this.car.isVulnerable()) {
+			this.car.setInvulnerable(50);
+			this.translationSpeed.x *= -0.7;
+			this.translationSpeed.z *= -0.7;
+		}
+	}
 	updatePos(dt) {
 		this.dragForces(dt);
+		this.checkCollisions();
 		this.model.position.x += this.translationSpeed.x * dt;
 		this.model.position.y += this.translationSpeed.y * dt;
 		this.model.position.z += this.translationSpeed.z * dt;
