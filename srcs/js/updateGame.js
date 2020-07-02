@@ -34,8 +34,8 @@ function updateGame(world, dt) {
 		if (dist2dSq(world.camera.position, world.actors.player.model.position) > 10000) {
 			let posDiff = world.camera.position.clone().sub(world.actors.player.model.position);
 
-			world.camera.position.x -= posDiff.x / 70;
-			world.camera.position.z -= posDiff.z / 70;
+			world.camera.position.x -= posDiff.x / 50;
+			world.camera.position.z -= posDiff.z / 50;
 		}
 		camLock = false;
 	}

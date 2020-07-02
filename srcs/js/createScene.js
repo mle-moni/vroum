@@ -1,8 +1,8 @@
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xdddddd);
 
-const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight);
-// const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 100000);
+// const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight);
+const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 10000);
 
 let camLock = true;
 keyboard.lockCamera = true;
