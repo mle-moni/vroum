@@ -49,7 +49,7 @@ class CarPhysics {
 			return ;
 		}
 		if (objCollided.hasOwnProperty("tileID") && objCollided.tileID == 3 && this.car.isVulnerable()) {
-			this.car.setInvulnerable(50);
+			this.car.setInvulnerable(200);
 			// this.translationSpeed.x *= -0.7;
 			// this.translationSpeed.z *= -0.7;
 			this.speed *= -0.7;
