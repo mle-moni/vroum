@@ -38,12 +38,18 @@ class Collider {
 			let position = player.model.position.clone();
 			position.y = 2;
 			let directionVector = target.sub( position );
-			let raycast = new THREE.Raycaster( position, directionVector.clone().normalize() );
+			let raycast = new THREE.Raycaster( position, directionVector.clone().normalize(), 0, directionVector.length());
 			let collisionResults = raycast.intersectObjects( meshArray );
-			if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
-				return (collisionResults[0].object);
+			if (collisionResults.length > 0) {
+				return ({obj: collisionResults[0].object, face: collisionResults[0].faceIndex});
 			}
 		}
 		return (null);
 	}
+}
+
+function radians_to_degrees(radians)
+{
+  var pi = Math.PI;
+  return radians * (180/pi);
 }

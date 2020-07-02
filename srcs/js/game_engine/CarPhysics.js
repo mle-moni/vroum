@@ -45,11 +45,27 @@ class CarPhysics {
 		if (!objCollided) {
 			return ;
 		}
-		if (objCollided.hasOwnProperty("tileID") && objCollided.tileID == 3 && this.car.isVulnerable()) {
-			this.car.setInvulnerable(200);
-			this.translationSpeed.x *= -0.7;
-			this.translationSpeed.z *= -0.7;
-			this.speed *= -0.7;
+		if (objCollided.obj.hasOwnProperty("tileID") && objCollided.obj.tileID == 3 && this.car.isVulnerable()) {
+			switch (objCollided.face) {
+				case 1:
+					this.model.rotation.y = (2 * Math.PI) - this.model.rotation.y;
+					break;
+				case 11:
+					this.model.rotation.y = (Math.PI) - this.model.rotation.y;
+					break;
+				case 3:
+					this.model.rotation.y = -this.model.rotation.y;
+					break;
+				case 9:
+					this.model.rotation.y = (Math.PI) - this.model.rotation.y;
+					break;
+				default:
+					console.log(":)")
+				}
+				this.speed *= 0.7;
+				this.translationSpeed.x = 0;
+				this.translationSpeed.z = 0;
+				this.car.setInvulnerable(150);
 		}
 	}
 	updatePos(dt) {
