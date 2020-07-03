@@ -4,6 +4,9 @@ let cameraView = 1;
 
 const oldPositions = [];
 
+// create controls settings dom
+bindingSettingsInit();
+
 // create a new scope
 {
 	function updateGame(game, dt) {

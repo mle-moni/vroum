@@ -1,0 +1,30 @@
+#controls-settings
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: auto;
+    width: 40%;
+    background: rgba(0, 0, 0, .5);
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    max-height: 50%;
+    overflow-y: scroll;
+}
+
+.control-box
+{
+    margin-right: auto;
+    margin-left: auto;
+    padding: 5px;
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.control-label
+{
+    color: white;
+}

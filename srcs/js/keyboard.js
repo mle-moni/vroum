@@ -15,7 +15,8 @@ const defToggles = {
 	showHitbox: "KeyH",
 	camera1: "F1",
 	camera2: "F2",
-	camera3: "F3"
+	camera3: "F3",
+	controls: "KeyC"
 };
 
 let actions, toggles;
@@ -39,6 +40,7 @@ const keyboard = {
 	camera1: false,
 	camera2: false,
 	camera3: false
+	controls: false
 };
 
 document.onkeydown = e => {
