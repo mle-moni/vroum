@@ -61,7 +61,8 @@ function startGame(world) {
 	camera.position.set(0, 5, 10);
 	world.actors.player = player;
 	scene.add(world.actors.player.model);
-
+	// create controls settings dom
+	bindingSettingsInit();
 	animate();
 }
 

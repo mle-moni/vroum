@@ -6,7 +6,8 @@ const defActions = {
 };
 
 const defToggles = {
-	lockCamera: "KeyY"
+	lockCamera: "KeyY",
+	controls: "KeyC"
 };
 
 let actions, toggles;
@@ -20,7 +21,8 @@ const keyboard = {
 	down: false,
 	left: false,
 	right: false,
-	lockCamera: false
+	lockCamera: false,
+	controls: false
 };
 
 document.onkeydown = e => {
