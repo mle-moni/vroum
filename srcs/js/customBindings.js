@@ -24,7 +24,6 @@ document.body.onkeyup = e => {
     type[currentEditing] = e.code;
     document.getElementById("setting-" + currentEditing).innerHTML = e.code;
     currentEditing = "";
-    console.log(e.code);
 }
 
 function bindingSettingsInit()
