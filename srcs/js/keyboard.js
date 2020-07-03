@@ -2,11 +2,20 @@ const defActions = {
 	up: "ArrowUp",
 	down: "ArrowDown",
 	left: "ArrowLeft",
-	right: "ArrowRight"
+	right: "ArrowRight",
+	w: "KeyW",
+	a: "KeyA",
+	s: "KeyS",
+	d: "KeyD",
+	r: "KeyR",
+	f: "KeyF"
 };
 
 const defToggles = {
-	lockCamera: "KeyY"
+	showHitbox: "KeyH",
+	camera1: "F1",
+	camera2: "F2",
+	camera3: "F3"
 };
 
 let actions, toggles;
@@ -20,7 +29,16 @@ const keyboard = {
 	down: false,
 	left: false,
 	right: false,
-	lockCamera: false
+	w: false,
+	a: false,
+	s: false,
+	d: false,
+	r: false,
+	f: false,
+	showHitbox: false,
+	camera1: false,
+	camera2: false,
+	camera3: false
 };
 
 document.onkeydown = e => {
@@ -30,6 +48,9 @@ document.onkeydown = e => {
 			keyboard[key] = true;
 			break ;
 		}
+	}
+	if (/F[1-3]/.test(e.code)) {
+		return (false); // prevent default action for F1 f2 f3
 	}
 }
 

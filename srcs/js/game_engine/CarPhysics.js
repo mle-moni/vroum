@@ -4,38 +4,61 @@ class CarPhysics {
 		this.car = car;
 		this.model = car.model;
 		this.translationSpeed = {x: 0, y: 0, z: 0};
+		this.speed = 0;
 	}
 	goLeft(dt) {
-		this.model.rotation.y += 0.02;
+		if (Math.abs(this.speed) > 0.05)
+		this.model.rotation.y += 0.04;
 	}
 	goRight(dt) {
-		this.model.rotation.y -= 0.02;
+		if (Math.abs(this.speed) > 0.05)
+		this.model.rotation.y -= 0.04;
 	}
 	accelerate(dt) {
-		this.translationSpeed.z -= Math.cos(this.model.rotation.y) / 4;
-		this.translationSpeed.x -= Math.sin(this.model.rotation.y) / 4;
+		// increase k to reduce car speed (1000)
+		const k = 2000;
+		this.speed += dt / k;
+		this.translationSpeed.z -= (Math.cos(this.model.rotation.y) / 1300) * dt;
+		this.translationSpeed.x -= (Math.sin(this.model.rotation.y) / 1300) * dt;
 	}
 	reverseGear(dt) {
-		this.translationSpeed.z += Math.cos(this.model.rotation.y) / 15;
-		this.translationSpeed.x += Math.sin(this.model.rotation.y) / 15;
+		this.speed -= dt / 2000;
+		this.translationSpeed.z += (Math.cos(this.model.rotation.y) / 2000) * dt;
+		this.translationSpeed.x += (Math.sin(this.model.rotation.y) / 2000) * dt;
 	}
 	reduce(speed, reduce, name) {
-		if (speed > -0.01 && speed < 0.01) {
-			this.translationSpeed[name] = 0;
-			return (0);
+		if (speed < 0.01 && speed > 0.01) {
+			return (speed);
 		}
 		return (this.translationSpeed[name] / reduce);
 	}
 	dragForces(dt) {
-		this.translationSpeed.x -= this.reduce(this.translationSpeed.x, 60, "x");
-		this.translationSpeed.y -= this.reduce(this.translationSpeed.y, 60, "y");
-		this.translationSpeed.z -= this.reduce(this.translationSpeed.z, 60, "z");
+		// reduce k = more ground grip (700)
+		this.speed *= 0.99;
+		const k = 650;
+		this.translationSpeed.x -= this.reduce(this.translationSpeed.x, k, "x") * dt;
+		this.translationSpeed.y -= this.reduce(this.translationSpeed.y, k, "y") * dt;
+		this.translationSpeed.z -= this.reduce(this.translationSpeed.z, k, "z") * dt;
+	}
+	checkCollisions() {
+		let objCollided = this.car.collider.mapCollision(this.car);
+		if (!objCollided) {
+			return ;
+		}
+		if (objCollided.obj.hasOwnProperty("tileID") && objCollided.obj.tileID == 3 && this.car.isVulnerable()) {
+			this.speed = 0;
+			this.translationSpeed.x = 0;
+			this.translationSpeed.z = 0;
+			this.car.setInvulnerable(100);
+		}
 	}
 	updatePos(dt) {
 		this.dragForces(dt);
-		this.model.position.x += this.translationSpeed.x;
-		this.model.position.y += this.translationSpeed.y;
-		this.model.position.z += this.translationSpeed.z;
-		// console.log(this.translationSpeed);
+		this.checkCollisions();
+		this.model.position.x += this.translationSpeed.x * dt;
+		this.model.position.y += this.translationSpeed.y * dt;
+		this.model.position.z += this.translationSpeed.z * dt;
+		this.model.position.x -= Math.sin(this.model.rotation.y) * this.speed * dt;
+		this.model.position.z -= Math.cos(this.model.rotation.y) * this.speed * dt;
 	}
 }
