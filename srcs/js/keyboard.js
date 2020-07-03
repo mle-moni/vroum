@@ -39,7 +39,7 @@ const keyboard = {
 	showHitbox: false,
 	camera1: false,
 	camera2: false,
-	camera3: false
+	camera3: false,
 	controls: false
 };
 
