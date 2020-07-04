@@ -4,6 +4,8 @@ let cameraView = 1;
 
 const oldPositions = [];
 
+const toast = siiimpleToast;
+
 // create controls settings dom
 bindingSettingsInit();
 
@@ -77,5 +79,10 @@ bindingSettingsInit();
 			keyboard.showHitbox = false;
 		}
 	}
-	const game = new Game(["/srcs/models/red_car.glb"], updateGame);
+	
+	const socket = io.connect(location.origin);
+
+	connectSocket(socket);
+	
+	const game = new Game(["/srcs/models/red_car.glb"], socket, toast, updateGame);
 }

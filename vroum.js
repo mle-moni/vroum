@@ -25,6 +25,8 @@ const server = http.createServer(handler).listen(8069, "localhost");
 
 const io = require('socket.io')(server);
 
+const rooms = require("./srv_files/game/rooms");
+
 MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
     if (err) throw err;
 	let dbo = db.db("art");
@@ -32,6 +34,7 @@ MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
 	io.on('connection', function (socket) {
 		
 		connection.setupEvents(socket, dbo);
+		rooms.setupEvents(socket, dbo);
 
 		socket.on("MAJ", txt=> { // pour les mises a jour critiques du site -> refresh de force pour les utilisateurs :)
 			if (socket.psd == "Redz") {
@@ -43,7 +46,12 @@ MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
 		});
 	
 		socket.on("disconnect", ()=>{
-			
+			if (!socket.hasOwnProperty("psd")) {
+				return ;
+			}
+			if (socket.hasOwnProperty("gameRoom")) {
+				socket.gameRoom.kick(socket);
+			}
 		});
 	});
 });
