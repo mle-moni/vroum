@@ -1,7 +1,5 @@
-class Game {
-	constructor (modelsPaths, socket, toast, updateFunction) {
-		this.socket = socket;
-		this.toast = toast;
+class Engine {
+	constructor (modelsPaths, updateFunction) {
 		this.updateGame = updateFunction;
 		this.scene = new THREE.Scene();
 		this.scene.background = new THREE.Color(0xdddddd);
@@ -83,7 +81,6 @@ class Game {
 		this.actors.player = this.player;
 		this.scene.add(this.actors.player.model);
 		
-		this.setupEvents();
 		this.animate();
 	}
 	animate() {
@@ -92,27 +89,6 @@ class Game {
 		this.renderer.render(this.scene, this.camera);
 		requestAnimationFrame(()=>{
 			this.animate();
-		});
-	}
-	setupEvents() {
-		this.socket.on("error!", msg => {
-			this.toast.alert(msg);
-		});
-		this.socket.on("success!", msg => {
-			this.toast.success(msg);
-		});
-		this.socket.on("msg!", msg => {
-			this.toast.message(msg);
-		});
-
-		this.socket.on("succes_co", ()=>{
-			this.toast.success("Connected");
-			if (location.search !== "") {
-				const room = location.search.slice(1);
-				this.socket.emit("joinRoom", room);
-			} else {
-				this.socket.emit("joinRoom", "global");
-			}
 		});
 	}
 }
