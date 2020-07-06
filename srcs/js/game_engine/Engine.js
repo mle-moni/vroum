@@ -1,6 +1,7 @@
 class Engine {
-	constructor (modelsPaths, updateFunction) {
-		this.updateGame = updateFunction;
+	constructor (modelsPaths, game, settings={skin: "red_car", name: ""}) {
+		this.settings = settings;
+		this.game = game;
 		this.scene = new THREE.Scene();
 		this.scene.background = new THREE.Color(0xdddddd);
 		this.camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 10000);
@@ -65,10 +66,14 @@ class Engine {
 		return (nameAndExtension.split(".glb")[0]);
 	}
 
+	skinExists(skin) {
+		return (this.prototypes.hasOwnProperty(skin));
+	}
+
 	// this function is called AFTER loading ALL the 3D models
 	startGame() {
 		// creating our player with a red car skin
-		this.player = new Car(this.skins[0], this);
+		this.player = new Car(this.settings.skin, this, this.settings.name);
 		
 		this.player.model.position.set(
 			this.defaultPos.x,
@@ -85,7 +90,7 @@ class Engine {
 	}
 	animate() {
 		let deltaTime = this.clock.getDelta() * 1000;
-		this.updateGame(this, deltaTime);
+		this.game.update(this, deltaTime);
 		this.renderer.render(this.scene, this.camera);
 		requestAnimationFrame(()=>{
 			this.animate();

@@ -1,9 +1,11 @@
 class Game {
 	constructor (modelsPaths, socket, toast) {
+		this.pseudo = sessionStorage.getItem('psd');
         this.socket = socket;
         this.toast = toast;
+		this.positionController = new PositionController(this);
+		this.engine = new Engine(modelsPaths, this);
         this.setupEvents();
-        this.engine = new Engine(modelsPaths, this.update);
     }
     update(engine, dt) {
 		const playerModel = engine.player.model;
@@ -72,8 +74,10 @@ class Game {
 			engine.player.toggleHitbox();
 			keyboard.showHitbox = false;
 		}
+		this.positionController.sendPosition();
     }
     setupEvents() {
+		this.positionController.setupEvents();
 		this.socket.on("error!", msg => {
 			this.toast.alert(msg);
 		});
@@ -92,6 +96,9 @@ class Game {
 			} else {
 				this.socket.emit("joinRoom", "global");
 			}
-		});
+        });
+        this.socket.on("logAndComeBack", ()=>{
+            brb();
+        });
 	}
 }

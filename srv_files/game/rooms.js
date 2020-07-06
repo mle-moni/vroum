@@ -1,3 +1,4 @@
+const POS = require("./Positions");
 const rooms = {};
 
 module.exports = {
@@ -11,6 +12,7 @@ class Room {
 		this.creator = socket;
 		this.users = [];
 		this.users.push(socket);
+		this.positions = new POS.Positions();
 		rooms[this.namespace] = this;
 		socket.join(this.namespace);
 		socket.emit("success!", `Room successfully created`);
@@ -32,7 +34,9 @@ class Room {
 		for (let i = 0; i < this.users.length; i++) {
 			if (this.users[i].psd === socket.psd) {
 				this.users.splice(i, 1);
+				this.positions.deletePlayerPos(socket.psd);
 				socket.to(this.namespace).emit("msg!", `${socket.psd} left the game`);
+				socket.to(this.namespace).emit("deletePlayer", socket.psd);
 				break ;
 			}
 		}
@@ -43,7 +47,7 @@ class Room {
 }
 
 function setupEvents(socket, dbo) {
-
+	POS.setupEvents(socket, dbo);
 	socket.on("joinRoom", roomId => {
 		if (!socket.hasOwnProperty("psd")) {
 			return ;

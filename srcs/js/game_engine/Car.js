@@ -15,8 +15,10 @@ const HITBOXES = {
 };
 
 class Car {
-	constructor(skin, world) {
-		this.model = world.prototypes[skin].clone();
+	constructor(skin, engine, name="") {
+		this.skin = skin;
+		this.name = name;
+		this.model = engine.prototypes[skin].clone();
 		this.hitbox = {
 			model: new THREE.Mesh(this.getGeometry(skin), HITBOXES.material),
 			geometryValues: HITBOXES.geometriesValues[skin],
@@ -26,7 +28,7 @@ class Car {
 		this.hitbox.spheres = this.initSpheres();
 		this.toggleHitbox();
 		this.physics = new CarPhysics(this);
-		this.collider = world.collider;
+		this.collider = engine.collider;
 		this.vulnerabilityTimer = 0;
 	}
 	initSpheres() {
