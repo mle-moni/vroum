@@ -16,5 +16,5 @@ bindingSettingsInit();
 
 	connectSocket(socket);
 	
-	const game = new Game(["/srcs/models/red_car.glb"], socket, toast);
+	const game = new Game(["red_car", "future", "wolfgang"], socket, toast);
 }

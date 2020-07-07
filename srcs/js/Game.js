@@ -1,10 +1,17 @@
 class Game {
-	constructor (modelsPaths, socket, toast) {
+	constructor (models, socket, toast) {
 		this.pseudo = sessionStorage.getItem('psd');
+		let settings = {
+			skin: sessionStorage.getItem('skin'),
+			pseudo: this.pseudo
+		};
+		if (!settings.skin) {
+			settings.skin = "red_car";
+		}
         this.socket = socket;
         this.toast = toast;
 		this.positionController = new PositionController(this);
-		this.engine = new Engine(modelsPaths, this);
+		this.engine = new Engine(models, this, settings);
         this.setupEvents();
     }
     update(engine, dt) {

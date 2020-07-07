@@ -1,5 +1,5 @@
 class Engine {
-	constructor (modelsPaths, game, settings={skin: "red_car", name: ""}) {
+	constructor (models, game, settings={skin: "red_car", name: ""}) {
 		this.settings = settings;
 		this.game = game;
 		this.scene = new THREE.Scene();
@@ -26,17 +26,20 @@ class Engine {
 		};
 		this.skins = [];
 
-		this.loadModels(modelsPaths);
+		this.loadModels(models);
 	}
 	setLights() {
-		const ambientLight = new THREE.AmbientLight(0x404040, 5);
-		this.scene.add(ambientLight);
+		const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xb0985a, 0.65 );
+		hemiLight.position.set( 0, 500, 0 );
+		this.scene.add( hemiLight );
 
-		const light = new THREE.PointLight(0xc4c4c4, 8);
-		light.position.set(0,4000,0);
-		this.scene.add(light);
+		const dirLight = new THREE.DirectionalLight( 0xeb9a94, 0.5 );
+		dirLight.position.set( -1, 0.75, 1 );
+		dirLight.position.multiplyScalar( 50);
+		dirLight.name = "dirlight";
+		this.scene.add( dirLight );
 	}
-	loadModels(modelsPaths) {
+	loadModels(models) {
 		/*
 			loading 3d models and saving them in this.prototypes
 			so we can easyly create cars with differents skins by cloning the prototypes
@@ -44,26 +47,18 @@ class Engine {
 		const loader = new THREE.GLTFLoader();
 		let modelsLoaded = 0;
 
-		for (let i = 0; i < modelsPaths.length; i++) {
-			loader.load(modelsPaths[i], gltf => {
+		for (let i = 0; i < models.length; i++) {
+			loader.load("/srcs/models/" + models[i] + ".glb", gltf => {
 				const model = gltf.scene;
-				const skinName = this.getFileName(modelsPaths[i]);
+				const skinName = models[i];
 				this.prototypes[skinName] = model;
 				this.skins.push(skinName);
 				modelsLoaded++;
-				if (modelsLoaded === modelsLoaded) {
+				if (modelsLoaded === models.length) {
 					this.startGame(this);
 				}
 			});
 		}
-	}
-	getFileName(path) {
-		// path exemple "/srcs/models/red_car.glb"
-		const split = path.split("/");
-		// ["", "srcs", "models", "red_car.glb"]
-		const nameAndExtension = split[split.length - 1];
-		// "red_car.glb"
-		return (nameAndExtension.split(".glb")[0]);
 	}
 
 	skinExists(skin) {
