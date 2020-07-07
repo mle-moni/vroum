@@ -32,6 +32,17 @@ function setupEvents(socket, dbo) {
 		socket.gameRoom.positions.updatePlayerPos(socket.psd, position);
 		socket.emit("updatePos", socket.gameRoom.positions.getPositions());
 	});
+
+	socket.on("playerHitsWall", pos => {
+		if ( !objHasProperties(socket, ["psd", "gameRoom"]) ) {
+			return ;
+		}
+		pos.r = 52;
+		pos.g = 128;
+		pos.b = 235;
+		socket.emit("playerHitsWall", pos);
+		socket.to(socket.gameRoom.namespace).emit("playerHitsWall", pos);
+	});
 }
 
 module.exports = {

@@ -12,7 +12,12 @@ class Game {
         this.toast = toast;
 		this.positionController = new PositionController(this);
 		this.engine = new Engine(models, this, settings);
-        this.setupEvents();
+		this.setupEvents();
+		
+		this.minimap = {
+			playerPos: []
+		};
+		this.firstUpdate = true;
     }
     update(engine, dt) {
 		const playerModel = engine.player.model;
@@ -31,7 +36,15 @@ class Game {
 			engine.player.physics.reverseGear(dt);
 		}
 		// update player pos with the speed vector
-		engine.player.physics.updatePos(dt);
+		// returns true if player hits a wall in this frame
+		if (engine.player.physics.updatePos(dt)) {
+			const timePositionIsShown = 2000;
+			this.socket.emit("playerHitsWall", {
+				x: this.engine.player.model.position.x / this.engine.mapLoader.map.tileScale,
+				y: this.engine.player.model.position.z / this.engine.mapLoader.map.tileScale,
+				time: Date.now() + timePositionIsShown
+			});
+		}
 	
 		if (keyboard.camera1) {
 			cameraView = 1;
@@ -82,7 +95,69 @@ class Game {
 			keyboard.showHitbox = false;
 		}
 		this.positionController.sendPosition();
-    }
+		if (this.firstUpdate) {
+			this.firstUpdate = false;
+			this.initMinimap();
+		}
+		this.updateMinimap();
+	}
+	initMinimap() { // the letters h and w stand for widths and heights
+		const canvas = document.getElementById("minimap");
+		canvas.width = innerHeight / 2.5;
+		canvas.height = innerHeight / 2.5;
+		canvas.style.right = "0px";
+		canvas.style.bottom = "0px";
+		const ctx = canvas.getContext("2d");
+		const array = this.engine.mapLoader.map.array;
+		const h = array.length;
+		const w = array[0].length;
+		const maxLength = (h > w) ? h : w;
+		const squareW = canvas.width / maxLength;
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		for (let i = 0; i < h; i++) {
+			for (let j = 0; j < w; j++) {
+				let colorNum = this.engine.mapLoader.colors[ array[i][j] ]; // colors[ tileNumber ]
+				ctx.fillStyle = "#" + colorNum.toString(16);
+				ctx.fillRect(j * squareW, i * squareW, squareW, squareW);
+			}
+		}
+		this.minimap.canvas = document.getElementById("minimapPlayers");
+		this.minimap.ctx = this.minimap.canvas.getContext("2d");
+		this.minimap.canvas.width = canvas.width;
+		this.minimap.canvas.height = canvas.height;
+		this.minimap.canvas.style.right = "0px";
+		this.minimap.canvas.style.bottom = "0px";
+		this.minimap.squareW = squareW;
+	}
+	updateMinimap() {
+		const ctx = this.minimap.ctx;
+		const arr = this.minimap.playerPos; // contains the positions where
+		ctx.clearRect(0, 0, this.minimap.canvas.width, this.minimap.canvas.height);
+		const playerX = this.engine.player.model.position.x / this.engine.mapLoader.map.tileScale;
+		const playerY = this.engine.player.model.position.z / this.engine.mapLoader.map.tileScale;
+		ctx.fillStyle = "green";
+		ctx.beginPath();
+		ctx.arc(playerX * this.minimap.squareW, playerY * this.minimap.squareW, 3, 0, 2 * Math.PI);
+		ctx.fill();
+		for (let i = 0; i < arr.length; i++) {
+			const pos = arr[i];
+			const time = pos.time - Date.now();
+			let alpha = 1;
+			if (time < 0) {
+				arr.splice(i, 1);
+				continue ;
+			}
+			if (time < 1000) {
+				alpha = time / 1000;
+			}
+			const hitX = pos.x * this.minimap.squareW;
+			const hitY = pos.y * this.minimap.squareW;
+			ctx.fillStyle = `rgba(${pos.r}, ${pos.g}, ${pos.b}, ${alpha})`;
+			ctx.beginPath();
+			ctx.arc(hitX, hitY, 2 * this.minimap.squareW, 0, 2 * Math.PI);
+			ctx.fill();
+		}
+	}
     setupEvents() {
 		this.positionController.setupEvents();
 		this.socket.on("error!", msg => {
@@ -106,6 +181,10 @@ class Game {
         });
         this.socket.on("logAndComeBack", ()=>{
             brb();
-        });
+		});
+		
+		this.socket.on("playerHitsWall", pos => {
+			this.minimap.playerPos.push(pos);
+		});
 	}
 }
