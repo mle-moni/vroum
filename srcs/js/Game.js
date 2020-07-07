@@ -18,6 +18,8 @@ class Game {
 			playerPos: []
 		};
 		this.firstUpdate = true;
+		this.playerWallHitTime = 0;
+		this.speedBeforeCrash = {x: 0, y: 0, z: 0};
     }
     update(engine, dt) {
 		const playerModel = engine.player.model;
@@ -39,13 +41,30 @@ class Game {
 		// returns true if player hits a wall in this frame
 		if (engine.player.physics.updatePos(dt)) {
 			const timePositionIsShown = 2000;
+			this.playerWallHitTime = Date.now();
 			this.socket.emit("playerHitsWall", {
 				x: this.engine.player.model.position.x / this.engine.mapLoader.map.tileScale,
 				y: this.engine.player.model.position.z / this.engine.mapLoader.map.tileScale,
-				time: Date.now() + timePositionIsShown
+				time: this.playerWallHitTime + timePositionIsShown
 			});
 		}
 	
+		this.cameras();
+
+		if (keyboard.showHitbox) {
+			engine.player.toggleHitbox();
+			keyboard.showHitbox = false;
+		}
+		this.positionController.sendPosition();
+		if (this.firstUpdate) {
+			this.firstUpdate = false;
+			this.initMinimap();
+		}
+		this.updateMinimap();
+	}
+	cameras() {
+		const engine = this.engine;
+		const playerModel = engine.player.model;
 		if (keyboard.camera1) {
 			cameraView = 1;
 			keyboard.camera1 = false;
@@ -55,6 +74,9 @@ class Game {
 		} else if (keyboard.camera3) {
 			cameraView = 3;
 			keyboard.camera3 = false;
+		} else if (keyboard.camera4) {
+			cameraView = 4;
+			keyboard.camera4 = false;
 		}
 		if (cameraView === 1 && !camLock) { // lock camera to player movements
 			camLock = true;
@@ -70,12 +92,35 @@ class Game {
 			engine.camera.position.z = engine.player.model.position.z;
 		}
 		if (cameraView === 2) {
+			let tmpPos = engine.player.model.position.clone();
+			engine.camera.position.y = 50;
+			const timeDiff = Date.now() - this.playerWallHitTime;
+			if (timeDiff < 400) {
+				tmpPos.x -= this.speedBeforeCrash.x * 100;
+				tmpPos.z -= this.speedBeforeCrash.z * 100;
+				this.speedBeforeCrash.x *= 0.9;
+				this.speedBeforeCrash.z *= 0.9;
+			} else {
+				let timeFactor = 1 - ((1000 - timeDiff) / 600);
+				if (timeFactor > 1 || timeFactor < 0) {
+					timeFactor = 1;
+				}
+				tmpPos.x -= (engine.player.physics.translationSpeed.x * 100) * timeFactor;
+				tmpPos.z -= (engine.player.physics.translationSpeed.z * 100) * timeFactor;
+				this.speedBeforeCrash.x = engine.player.physics.translationSpeed.x;
+				this.speedBeforeCrash.z = engine.player.physics.translationSpeed.z;
+			}
+			tmpPos.x += Math.sin(engine.player.model.rotation.y) * 100;
+			tmpPos.z += Math.cos(engine.player.model.rotation.y) * 100;
+			engine.camera.position.x = tmpPos.x;
+			engine.camera.position.z = tmpPos.z;
+		} else if (cameraView === 3) {
 			let posDiff = engine.camera.position.clone().sub(engine.player.model.position);
 	
 			engine.camera.position.x -= posDiff.x / 40;
 			engine.camera.position.z -= posDiff.z / 40;
 			engine.camera.position.y = 200;
-		} else if (cameraView === 3) {
+		} else if (cameraView === 4) {
 			if (oldPositions.length > 20) {
 				engine.camera.position.x = oldPositions[0][0];
 				engine.camera.position.z = oldPositions[0][1];
@@ -91,18 +136,7 @@ class Game {
 		]);
 		if (cameraView !== 1) {
 			engine.camera.lookAt(playerModel.position);
-			console.log(cameraView)
 		}
-		if (keyboard.showHitbox) {
-			engine.player.toggleHitbox();
-			keyboard.showHitbox = false;
-		}
-		this.positionController.sendPosition();
-		if (this.firstUpdate) {
-			this.firstUpdate = false;
-			this.initMinimap();
-		}
-		this.updateMinimap();
 	}
 	initMinimap() { // the letters h and w stand for widths and heights
 		const canvas = document.getElementById("minimap");
