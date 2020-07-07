@@ -59,7 +59,8 @@ class Game {
 		if (cameraView === 1 && !camLock) { // lock camera to player movements
 			camLock = true;
 			playerModel.add(engine.camera);
-			engine.camera.position.set(0, 50, 100);
+			engine.camera.position.set(0, 20, -15);
+			engine.camera.rotation.set(0, 0, 0);
 		}
 		if (cameraView !== 1 && camLock) { // unlock camera from player for others camera views
 			camLock = false;
@@ -88,8 +89,10 @@ class Game {
 			engine.player.model.position.x,
 			engine.player.model.position.z
 		]);
-		engine.camera.lookAt(playerModel.position);
-	
+		if (cameraView !== 1) {
+			engine.camera.lookAt(playerModel.position);
+			console.log(cameraView)
+		}
 		if (keyboard.showHitbox) {
 			engine.player.toggleHitbox();
 			keyboard.showHitbox = false;
