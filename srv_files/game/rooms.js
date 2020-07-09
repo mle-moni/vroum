@@ -63,4 +63,16 @@ function setupEvents(socket, dbo) {
 		}
 	});
 
+	socket.on("getRooms", () => {
+		const objToSend = [];
+		for (key in rooms) {
+			objToSend.push({
+				namespace: key,
+				creator: rooms[key].creator.psd,
+				users: rooms[key].users.map(userSocket=>userSocket.psd)
+			});
+		}
+		socket.emit("getRooms", objToSend);
+	});
+
 }
