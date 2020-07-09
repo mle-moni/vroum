@@ -5,7 +5,9 @@
 
 const HITBOXES = {
 	geometriesValues: {
-		"red_car": {x: 20, y: 30, z: 42}
+		"red_car": {x: 20, y: 30, z: 42},
+		"future": {x: 20, y: 30, z: 42},
+		"wolfgang": {x: 20, y: 30, z: 42},
 	},
 	material: new THREE.MeshPhongMaterial({
 		color: 0xff0000,
@@ -15,8 +17,13 @@ const HITBOXES = {
 };
 
 class Car {
-	constructor(skin, world) {
-		this.model = world.prototypes[skin].clone();
+	constructor(skin, engine, name="") {
+		this.name = name;
+		if (!engine.skinExists(skin)) {
+			skin = "red_car";
+		}
+		this.skin = skin;
+		this.model = engine.prototypes[skin].clone();
 		this.hitbox = {
 			model: new THREE.Mesh(this.getGeometry(skin), HITBOXES.material),
 			geometryValues: HITBOXES.geometriesValues[skin],
@@ -26,7 +33,7 @@ class Car {
 		this.hitbox.spheres = this.initSpheres();
 		this.toggleHitbox();
 		this.physics = new CarPhysics(this);
-		this.collider = world.collider;
+		this.collider = engine.collider;
 		this.vulnerabilityTimer = 0;
 	}
 	initSpheres() {

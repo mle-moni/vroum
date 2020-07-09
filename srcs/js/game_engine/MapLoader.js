@@ -2,11 +2,18 @@ class MapLoader {
 	constructor (world) {
 		this.world = world;
 		this.tiles = [];
+		// this array can be used to generate minimaps
+		this.colors = [
+			0x7e6cd9,
+			0x90a395,
+			0xb0985a,
+			0x9e2a2b
+		];
 		this.materials = [
-			new THREE.MeshBasicMaterial({color: 0x7e6cd9}),
-			new THREE.MeshBasicMaterial({color: 0x90a395}),
-			new THREE.MeshBasicMaterial({color: 0xb0985a}),
-			new THREE.MeshBasicMaterial({color: 0x9e2a2b})
+			new THREE.MeshBasicMaterial({color: this.colors[0]}),
+			new THREE.MeshBasicMaterial({color: this.colors[1]}),
+			new THREE.MeshBasicMaterial({color: this.colors[2]}),
+			new THREE.MeshBasicMaterial({color: this.colors[3]})
 		];
 		this.tileGeometry = null;
 		this.cubeGeometry = null;

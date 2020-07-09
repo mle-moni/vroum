@@ -16,6 +16,7 @@ const defToggles = {
 	camera1: "F1",
 	camera2: "F2",
 	camera3: "F3",
+	camera4: "F4",
 	controls: "KeyC"
 };
 
@@ -40,6 +41,7 @@ const keyboard = {
 	camera1: false,
 	camera2: false,
 	camera3: false,
+	camera4: false,
 	controls: false
 };
 
@@ -51,7 +53,7 @@ document.onkeydown = e => {
 			break ;
 		}
 	}
-	if (/F[1-3]/.test(e.code)) {
+	if (/F[1-3]$/.test(e.code)) {
 		return (false); // prevent default action for F1 f2 f3
 	}
 }

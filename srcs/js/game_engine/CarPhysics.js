@@ -43,22 +43,25 @@ class CarPhysics {
 	checkCollisions() {
 		let objCollided = this.car.collider.mapCollision(this.car);
 		if (!objCollided) {
-			return ;
+			return (false);
 		}
 		if (objCollided.obj.hasOwnProperty("tileID") && objCollided.obj.tileID == 3 && this.car.isVulnerable()) {
 			this.speed = 0;
 			this.translationSpeed.x = 0;
 			this.translationSpeed.z = 0;
 			this.car.setInvulnerable(100);
+			return (true);
 		}
+		return (false);
 	}
 	updatePos(dt) {
 		this.dragForces(dt);
-		this.checkCollisions();
+		const wallHit = this.checkCollisions();
 		this.model.position.x += this.translationSpeed.x * dt;
 		this.model.position.y += this.translationSpeed.y * dt;
 		this.model.position.z += this.translationSpeed.z * dt;
 		this.model.position.x -= Math.sin(this.model.rotation.y) * this.speed * dt;
 		this.model.position.z -= Math.cos(this.model.rotation.y) * this.speed * dt;
+		return (wallHit);
 	}
 }

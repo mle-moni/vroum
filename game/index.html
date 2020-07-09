@@ -1,0 +1,55 @@
+<!--
+Copyright 2020 LE MONIES DE SAGAZAN Mayeul
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>VROUM</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="../srcs/style/main.css">
+    <link rel="stylesheet" type="text/css" href="../srcs/style/bindings-settings.css">
+	<link rel="icon" type="image/png" href="../icon.png" />
+    <script>
+        console.warn("V-0.0 DEV")
+	</script>
+	<script src="../srcs/js/socket.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/siiimple-toast/dist/style.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/siiimple-toast/dist/siiimple-toast.min.js"></script>
+	<script src="../libs/three.min.js"></script>
+	<script src="../libs/GLTFLoader.js"></script>
+</head>
+<body>
+    <canvas id="minimap"></canvas>
+    <canvas id="minimapPlayers"></canvas>
+	<script src="../srcs/js/maps/map1.js"></script>
+	<script src="../srcs/js/maps/map2.js"></script>
+	<script src="../srcs/js/game_engine/MapLoader.js"></script>
+
+    <script src="../srcs/js/keyboard.js"></script>
+	<script src="../srcs/js/customBindings.js"></script>
+
+	<script src="../srcs/js/game_engine/CarPhysics.js"></script>
+	<script src="../srcs/js/game_engine/Car.js"></script>
+	<script src="../srcs/js/game_engine/Collider.js"></script>
+    <script src="../srcs/js/game_engine/Engine.js"></script>
+    <script src="../srcs/js/PositionController.js"></script>
+	<script src="../srcs/js/Game.js"></script>
+	<script src="../srcs/js/createGame.js"></script>
+</body>
+
+</html>

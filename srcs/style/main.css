@@ -5,3 +5,7 @@ body {
 canvas {
 	display: block; /* fix necessary to remove space at bottom of canvas */
 }
+
+#minimap, #minimapPlayers {
+	position: absolute;
+}
