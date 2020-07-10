@@ -1,13 +1,13 @@
 class Collider {
-	constructor (mapLoader, world) {
+	constructor (mapLoader, engine) {
 		this.mapLoader = mapLoader;
-		this.world = world;
+		this.engine = engine;
 	}
-	getCloseTilesInArray(player) {
+	getCloseTilesInArray(obj3D) {
 		const tilesArray = [];
 		let refPos =  {
-			x: parseInt(player.model.position.x / this.mapLoader.map.tileScale) - 1,
-			y: parseInt(player.model.position.z / this.mapLoader.map.tileScale) - 1
+			x: parseInt(obj3D.position.x / this.mapLoader.map.tileScale) - 1,
+			y: parseInt(obj3D.position.z / this.mapLoader.map.tileScale) - 1
 		};
 		// create an array containing the 9 tiles around refPos
 		for (let i = 0; i < 3; i++) {
@@ -27,7 +27,7 @@ class Collider {
 		return (tilesArray);
 	}	
 	mapCollision(player) {
-		const meshArray = this.getCloseTilesInArray(player);
+		const meshArray = this.getCloseTilesInArray(player.model);
 		let target = new THREE.Vector3();
 
 		if (meshArray.length === 0) {
@@ -45,6 +45,23 @@ class Collider {
 			}
 		}
 		return (null);
+	}
+	bulletCollision(bullet) {
+		// const meshArray = [this.engine.player.model];
+		const meshArray = [this.engine.player.hitbox.model];
+		const position = bullet.model.position.clone();
+		position.y = 4;
+		const raycast = new THREE.Raycaster(
+			position,
+			bullet.directionVector,
+			0,
+			70
+		);
+		const collisionResults = raycast.intersectObjects( meshArray );
+		if (collisionResults.length > 0) {
+			return (true);
+		}
+		return (false);
 	}
 }
 

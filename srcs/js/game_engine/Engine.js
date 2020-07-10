@@ -20,6 +20,7 @@ class Engine {
 		this.mapLoader = new MapLoader(this);
 		this.mapLoader.load(map2);
 		this.collider = new Collider(this.mapLoader, this);
+		this.shotController = new ShotController(this);
 		this.player = null;
 		this.actors = {
 			player: this.player
@@ -90,5 +91,13 @@ class Engine {
 		requestAnimationFrame(()=>{
 			this.animate();
 		});
+	}
+	objHasProperties(obj, properties) {
+		for (let i = 0; i < properties.length; i++) {
+			if (!obj.hasOwnProperty(properties[i])) {
+				return (false);
+			}
+		}
+		return (true);
 	}
 }

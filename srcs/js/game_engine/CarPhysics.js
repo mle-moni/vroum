@@ -26,6 +26,11 @@ class CarPhysics {
 		this.translationSpeed.z += (Math.cos(this.model.rotation.y) / 2000) * dt;
 		this.translationSpeed.x += (Math.sin(this.model.rotation.y) / 2000) * dt;
 	}
+	slow(factor) {
+		this.speed *= factor;
+		this.translationSpeed.x *= factor;
+		this.translationSpeed.z *= factor;
+	}
 	reduce(speed, reduce, name) {
 		if (speed < 0.01 && speed > 0.01) {
 			return (speed);
