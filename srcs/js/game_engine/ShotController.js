@@ -8,7 +8,7 @@ class ShotController {
 		};
 		this.minimumTime = {
 			red: 200,
-			blue: 2000
+			blue: 500
 		};
 	}
 	newShot(args) {
