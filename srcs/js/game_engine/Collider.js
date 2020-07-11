@@ -36,7 +36,7 @@ class Collider {
 		for (let i = 0; i < player.hitbox.spheres.length; i++) {
 			player.hitbox.spheres[i].getWorldPosition(target);
 			let position = player.model.position.clone();
-			position.y = 2;
+			position.y = 1;
 			let directionVector = target.sub( position );
 			let raycast = new THREE.Raycaster( position, directionVector.clone().normalize(), 0, directionVector.length());
 			let collisionResults = raycast.intersectObjects( meshArray );
@@ -50,18 +50,30 @@ class Collider {
 		// const meshArray = [this.engine.player.model];
 		const meshArray = [this.engine.player.hitbox.model];
 		const position = bullet.model.position.clone();
-		position.y = 4;
+		position.y = 1;
 		const raycast = new THREE.Raycaster(
 			position,
 			bullet.directionVector,
 			0,
-			70
+			7.0
 		);
 		const collisionResults = raycast.intersectObjects( meshArray );
 		if (collisionResults.length > 0) {
 			return (true);
 		}
+		const playerPos = this.engine.player.model.position;
+		return (this.pointIntersectsSphere(position, playerPos, 2));
+	}
+	pointIntersectsSphere(pos1, pos2, radius) {
+		if (this.distanceSq2D(pos1, pos2) < radius * radius) {
+			return (true);
+		}
 		return (false);
+	}
+	distanceSq2D(pos1, pos2) {
+		const x = pos2.x - pos1.x;
+		const y = pos2.z - pos1.z;
+		return ((x * x) + (y * y));
 	}
 }
 

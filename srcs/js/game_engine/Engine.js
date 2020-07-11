@@ -51,6 +51,9 @@ class Engine {
 		for (let i = 0; i < models.length; i++) {
 			loader.load("/srcs/models/" + models[i] + ".glb", gltf => {
 				const model = gltf.scene;
+				model.scale.x = 0.1;
+				model.scale.y = 0.1;
+				model.scale.z = 0.1;
 				const skinName = models[i];
 				this.prototypes[skinName] = model;
 				this.skins.push(skinName);
@@ -73,7 +76,7 @@ class Engine {
 		
 		this.player.model.position.set(
 			this.defaultPos.x,
-			this.defaultPos.y,
+			0.9,
 			this.defaultPos.z
 		);
 		// adding camera to player so the camera follows him

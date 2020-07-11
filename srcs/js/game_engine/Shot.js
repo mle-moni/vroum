@@ -20,12 +20,12 @@ class Shot {
 
 class RedShot extends Shot {
 	constructor(position, angle, shooter) {
-		const radius = 5;
+		const radius = 0.5;
 		const geometry = new THREE.SphereGeometry( radius, 32, 32 );
-		const material = new THREE.MeshBasicMaterial({color: 0xFF0000});
+		const material = new THREE.MeshBasicMaterial({color: 0x9e2a2b});
 		const mesh = new THREE.Mesh(geometry, material);
 		super(mesh, {
-			speed: 1.9,
+			speed: 0.25,
 			angle,
 			shooter,
 			position
@@ -37,12 +37,12 @@ class RedShot extends Shot {
 
 class BlueShot extends Shot {
 	constructor(position, angle, shooter) {
-		const radius = 5;
+		const radius = 0.5;
 		const geometry = new THREE.SphereGeometry( radius, 32, 32 );
 		const material = new THREE.MeshBasicMaterial({color: 0x0000FF});
 		const mesh = new THREE.Mesh(geometry, material);
 		super(mesh, {
-			speed: 2.5,
+			speed: 0.25,
 			angle,
 			shooter,
 			position

@@ -7,24 +7,26 @@ class CarPhysics {
 		this.speed = 0;
 	}
 	goLeft(dt) {
-		if (Math.abs(this.speed) > 0.05)
-		this.model.rotation.y += 0.04;
+		if (Math.abs(this.speed) > 0.005) {
+			this.model.rotation.y += 0.04 * dt * 0.04;
+		}
 	}
 	goRight(dt) {
-		if (Math.abs(this.speed) > 0.05)
-		this.model.rotation.y -= 0.04;
+		if (Math.abs(this.speed) > 0.005) {	
+			this.model.rotation.y -= 0.04 * dt * 0.04;
+		}
 	}
 	accelerate(dt) {
 		// increase k to reduce car speed (1000)
-		const k = 2000;
+		const k = 30000;
 		this.speed += dt / k;
-		this.translationSpeed.z -= (Math.cos(this.model.rotation.y) / 1300) * dt;
-		this.translationSpeed.x -= (Math.sin(this.model.rotation.y) / 1300) * dt;
+		this.translationSpeed.z -= (Math.cos(this.model.rotation.y) / 15400) * dt;
+		this.translationSpeed.x -= (Math.sin(this.model.rotation.y) / 15400) * dt;
 	}
 	reverseGear(dt) {
-		this.speed -= dt / 2000;
-		this.translationSpeed.z += (Math.cos(this.model.rotation.y) / 2000) * dt;
-		this.translationSpeed.x += (Math.sin(this.model.rotation.y) / 2000) * dt;
+		this.speed -= dt / 40000;
+		this.translationSpeed.z += (Math.cos(this.model.rotation.y) / 25000) * dt;
+		this.translationSpeed.x += (Math.sin(this.model.rotation.y) / 25000) * dt;
 	}
 	slow(factor) {
 		this.speed *= factor;
@@ -51,7 +53,7 @@ class CarPhysics {
 			return (false);
 		}
 		if (objCollided.obj.hasOwnProperty("tileID") && objCollided.obj.tileID == 3 && this.car.isVulnerable()) {
-			this.speed = 0;
+			this.speed = 0.0005; // the wall absorbs the car
 			this.translationSpeed.x = 0;
 			this.translationSpeed.z = 0;
 			this.car.setInvulnerable(100);

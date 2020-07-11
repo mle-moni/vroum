@@ -18,6 +18,8 @@ class MapLoader {
 		this.tileGeometry = null;
 		this.cubeGeometry = null;
 		this.map = null;
+		this.centerOfMap = new THREE.Vector3();
+		this.mapLen = new THREE.Vector3();
 	}
 	load(map) {
 		this.map = map;
@@ -56,6 +58,10 @@ class MapLoader {
 				this.world.scene.add(this.tiles[i][j]);
 			}
 		}
+		this.mapLen.x = map.array[0].length * map.tileScale;
+		this.mapLen.z = map.array.length * map.tileScale;
+		this.centerOfMap.x = this.mapLen.x / 2;
+		this.centerOfMap.z = this.mapLen.z / 2;
 	}
 	replaceTile(x, y, tileID) {
 		this.world.scene.remove(this.tiles[y][x]);
