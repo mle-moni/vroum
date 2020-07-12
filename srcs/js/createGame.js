@@ -15,5 +15,5 @@ bindingSettingsInit();
 
 	connectSocket(socket);
 	
-	const game = new Game(["red_car", "future", "wolfgang"], socket, toast);
+	const game = new Game(vehicles, socket, toast);
 }

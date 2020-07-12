@@ -1,27 +1,3 @@
-const defActions = {
-	up: "ArrowUp",
-	down: "ArrowDown",
-	left: "ArrowLeft",
-	right: "ArrowRight",
-	w: "KeyW",
-	a: "KeyA",
-	s: "KeyS",
-	d: "KeyD",
-	r: "KeyR",
-	f: "KeyF",
-	shootRed: "KeyZ",
-	shootBlue: "KeyX"
-};
-
-const defToggles = {
-	showHitbox: "KeyH",
-	camera1: "F1",
-	camera2: "F2",
-	camera3: "F3",
-	camera4: "F4",
-	controls: "KeyC"
-};
-
 let actions, toggles;
 
 // TO DO: get user bindings or use default
@@ -51,9 +27,9 @@ const keyboard = {
 
 document.onkeydown = e => {
 	// console.log(e.code)
-	for (key in actions) {
-		if (e.code === actions[key]) {
-			keyboard[key] = true;
+	for (control in actions) {
+		if (e.code === actions[control].key) {
+			keyboard[control] = true;
 			break ;
 		}
 	}
@@ -64,15 +40,15 @@ document.onkeydown = e => {
 
 document.onkeyup = e => {
 	// console.log(e.code)
-	for (key in actions) {
-		if (e.code === actions[key]) {
-			keyboard[key] = false;
+	for (id in actions) {
+		if (e.code === actions[id].key) {
+			keyboard[id] = false;
 			break ;
 		}
 	}
-	for (key in toggles) {
-		if (e.code === toggles[key]) {
-			keyboard[key] = !keyboard[key];
+	for (id in toggles) {
+		if (e.code === toggles[id].key) {
+			keyboard[id] = !keyboard[id];
 			break ;
 		}
 	}

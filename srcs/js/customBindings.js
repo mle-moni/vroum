@@ -3,25 +3,25 @@ let currentEditing = ""
 document.body.onkeyup = e => {
     let type = actions[currentEditing] ? actions : toggles;
 
-    if (e.code == toggles["controls"] && currentEditing == "") {
+    if (e.code == toggles["controls"].key && currentEditing == "") {
         document.getElementById("controls-settings").style.display = (document.getElementById("controls-settings").style.display == "none") ? "block" : "none";
     }
     if (currentEditing === "") {
         return;
     }
     if (e.which == 27) {
-        document.getElementById("setting-" + currentEditing).innerHTML = type[currentEditing];
+        document.getElementById("setting-" + currentEditing).innerHTML = type[currentEditing].key;
         return (currentEditing = "");
     }
-    for (key in actions) {
-        if (actions[key] == e.code && key != currentEditing)
+    for (control in actions) {
+        if (actions[control].key == e.code && control != currentEditing)
             return;
     }
-    for (key in toggles) {
-        if (toggles[key] == e.code && key != currentEditing)
+    for (control in toggles) {
+        if (toggles[control].key == e.code && control != currentEditing)
             return;
     }
-    type[currentEditing] = e.code;
+    type[currentEditing].key = e.code;
     document.getElementById("setting-" + currentEditing).innerHTML = e.code;
     currentEditing = "";
 }
@@ -31,34 +31,34 @@ function bindingSettingsInit()
     let htmlControlsSettings = document.createElement("div");
 
     htmlControlsSettings.id = "controls-settings";
-    for (key in actions) {
-        htmlControlsSettings.appendChild(addControlSetting(key, actions[key]));
+    for (id in actions) {
+        htmlControlsSettings.appendChild(addControlSetting(id, actions[id]));
     }
-    for (key in toggles) {
-        htmlControlsSettings.appendChild(addControlSetting(key, toggles[key]));
+    for (control in toggles) {
+        htmlControlsSettings.appendChild(addControlSetting(control, toggles[control]));
     }
     htmlControlsSettings.style.display = "none";
     document.body.appendChild(htmlControlsSettings);
 }
 
-function addControlSetting(key, value)
+function addControlSetting(id, control)
 {
     let container = document.createElement("div");
     let label = document.createElement("label");
     let button = document.createElement("button");
 
-    label.innerText = key;
+    label.innerText = control.display;
     label.className = "control-label";
-    button.innerText = value;
+    button.innerText = control.key;
     button.className = "control-button";
-    button.id = "setting-" + key;
+    button.id = "setting-" + id;
     button.onclick = e => {
         let type = actions[currentEditing] ? actions : toggles;
 
         if (currentEditing != "") {
-            document.getElementById("setting-" + currentEditing).innerHTML = type[currentEditing];
+            document.getElementById("setting-" + currentEditing).innerHTML = type[currentEditing].key;
         }
-        currentEditing = key;
+        currentEditing = id;
         document.getElementById("setting-" + currentEditing).innerHTML = "Editing...";
     }
     container.className = "control-box";

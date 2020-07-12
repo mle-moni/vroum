@@ -49,12 +49,13 @@ class Engine {
 		let modelsLoaded = 0;
 
 		for (let i = 0; i < models.length; i++) {
-			loader.load("/srcs/models/" + models[i] + ".glb", gltf => {
+			console.log(`loading... /srcs/models/${models[i].id}.glb`);
+			loader.load("/srcs/models/" + models[i].id + ".glb", gltf => {
 				const model = gltf.scene;
 				model.scale.x = 0.1;
 				model.scale.y = 0.1;
 				model.scale.z = 0.1;
-				const skinName = models[i];
+				const skinName = models[i].id;
 				this.prototypes[skinName] = model;
 				this.skins.push(skinName);
 				modelsLoaded++;

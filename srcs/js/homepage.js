@@ -2,7 +2,7 @@ window.onload = () => {
     const socket = io.connect(location.origin);
     connectSocket(socket);
     
-    const home_view = new HomeView(["red_car", "future", "wolfgang"]);
+    const home_view = new HomeView(vehicles);
     const models_dropdown = document.getElementById("input-skin");
     
     document.getElementById("logged-as").innerHTML = sessionStorage.getItem('psd');
