@@ -42,10 +42,39 @@ class Game {
 		if (engine.player.physics.updatePos(dt)) {
 			const timePositionIsShown = 2000;
 			this.playerWallHitTime = Date.now();
-			this.socket.emit("playerHitsWall", {
+			this.socket.emit("gameAction", "playerHitsWall", {
 				x: this.engine.player.model.position.x / this.engine.mapLoader.map.tileScale,
 				y: this.engine.player.model.position.z / this.engine.mapLoader.map.tileScale,
 				time: this.playerWallHitTime + timePositionIsShown
+			});
+		}
+		let bullet = engine.shotController.updatePos(dt);
+		if (bullet) {
+			if (bullet.type === "red") {
+				engine.player.physics.slow(0.5);
+			} else {
+				this.socket.emit("gameAction", "hit", {
+					type: bullet.type,
+					shooter: bullet.shooter
+				});
+			}
+		}
+
+		if (keyboard.shootRed && engine.shotController.clientCanShoot("red")) {
+			engine.shotController.clientSetTimer("red");
+			this.socket.emit("gameAction", "shot", {
+				type: "red",
+				position: engine.player.model.position.clone(),
+				angle: engine.player.model.rotation.y
+			});
+		}
+
+		if (keyboard.shootBlue && engine.shotController.clientCanShoot("blue")) {
+			engine.shotController.clientSetTimer("blue");
+			this.socket.emit("gameAction", "shot", {
+				type: "blue",
+				position: engine.player.model.position.clone(),
+				angle: engine.player.model.rotation.y
 			});
 		}
 	
@@ -59,6 +88,7 @@ class Game {
 		if (this.firstUpdate) {
 			this.firstUpdate = false;
 			this.initMinimap();
+			keyboard.camera2 = true;
 		}
 		this.updateMinimap();
 	}
@@ -168,7 +198,7 @@ class Game {
 	}
 	updateMinimap() {
 		const ctx = this.minimap.ctx;
-		const arr = this.minimap.playerPos; // contains the positions where
+		const arr = this.minimap.playerPos; // contains the positions where players have hit walls
 		ctx.clearRect(0, 0, this.minimap.canvas.width, this.minimap.canvas.height);
 		const playerX = this.engine.player.model.position.x / this.engine.mapLoader.map.tileScale;
 		const playerY = this.engine.player.model.position.z / this.engine.mapLoader.map.tileScale;
@@ -195,8 +225,24 @@ class Game {
 			ctx.fill();
 		}
 	}
+	action(actionType, args) {
+		switch (actionType) {
+			case "shot":
+				this.engine.shotController.newShot(args);
+				break;
+			case "invu":
+				this.engine.player.setInvulnerable(args);
+				break;
+			case "playerHitsWall":
+				this.minimap.playerPos.push(args);
+				break;
+		}
+	}
     setupEvents() {
 		this.positionController.setupEvents();
+		this.socket.on("debugLog", msg => {
+			console.log(msg);
+		});
 		this.socket.on("error!", msg => {
 			this.toast.alert(msg);
 		});
@@ -219,9 +265,9 @@ class Game {
         this.socket.on("logAndComeBack", ()=>{
             brb();
 		});
-		
-		this.socket.on("playerHitsWall", pos => {
-			this.minimap.playerPos.push(pos);
+
+		this.socket.on("gameAction", (actionType, args) => {
+			this.action(actionType, args);
 		});
 	}
 }

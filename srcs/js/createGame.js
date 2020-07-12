@@ -1,4 +1,3 @@
-keyboard.camera1 = true;
 let camLock = false;
 let cameraView = 1;
 

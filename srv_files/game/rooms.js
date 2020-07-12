@@ -1,4 +1,5 @@
 const POS = require("./Positions");
+const gameEngines = require("./game_engines/game_engines");
 const rooms = {};
 
 module.exports = {
@@ -16,23 +17,32 @@ class Room {
 		rooms[this.namespace] = this;
 		socket.join(this.namespace);
 		socket.emit("success!", `Room successfully created`);
+		this.gameEngine = new gameEngines.VroumAndShoot(this);
+	}
+	findSocketByPsd(psd) {
+		for (let i = 0; i < this.users.length; i++) {
+			if (this.users[i].psd == psd) {
+				return (this.users[i]);
+			}
+		}
+		return (null);
 	}
 	join(socket) {
-		for (let i = 0; i < this.users.length; i++) {
-			if (this.users[i].psd == socket.psd) {
-				socket.emit("error!", "That's weird, it semms that you already are in this game");
-				return ;
-			}
+		if (this.findSocketByPsd(socket.psd)) {
+			socket.emit("error!", "That's weird, it seems that you already are in this game");
+			return ;
 		}
 		socket.join(this.namespace);
 		socket.gameRoom = this;
 		this.users.push(socket);
+		this.gameEngine.setRole(socket, "newPlayer");
 		socket.emit("success!", `Successfully joined ${this.creator.psd}'s room`);
 		socket.to(this.namespace).emit("success!", `${socket.psd} joined the game!`);
 	}
 	kick(socket) {
 		for (let i = 0; i < this.users.length; i++) {
 			if (this.users[i].psd === socket.psd) {
+				this.gameEngine.action("playerLeft", null, {socket, dbo: null});
 				this.users.splice(i, 1);
 				this.positions.deletePlayerPos(socket.psd);
 				socket.to(this.namespace).emit("msg!", `${socket.psd} left the game`);
@@ -48,6 +58,7 @@ class Room {
 
 function setupEvents(socket, dbo) {
 	POS.setupEvents(socket, dbo);
+	gameEngines.setupEvents(socket, dbo);
 	socket.on("joinRoom", roomId => {
 		if (!socket.hasOwnProperty("psd")) {
 			return ;

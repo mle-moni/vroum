@@ -8,7 +8,9 @@ const defActions = {
 	s: "KeyS",
 	d: "KeyD",
 	r: "KeyR",
-	f: "KeyF"
+	f: "KeyF",
+	shootRed: "KeyZ",
+	shootBlue: "KeyX"
 };
 
 const defToggles = {
@@ -42,7 +44,9 @@ const keyboard = {
 	camera2: false,
 	camera3: false,
 	camera4: false,
-	controls: false
+	controls: false,
+	shootRed: false,
+	shootBlue: false
 };
 
 document.onkeydown = e => {
