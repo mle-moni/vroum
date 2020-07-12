@@ -2,13 +2,14 @@ class PositionController {
 	constructor (game) {
 		this.game = game;
 		this.players = {};
+		this.yPos = 0.9;
 	}
 	addPlayer(position, pseudo) {
 		const car = new Car(position.skin, this.game.engine, pseudo);
 
 		car.model.position.set(
 			position.x,
-			0,
+			this.yPos,
 			position.z
 		);
 		car.model.rotation.y = position.ry;
@@ -17,7 +18,7 @@ class PositionController {
 	}
 	updatePos(position, pseudo) {
 		this.players[pseudo].model.position.x = position.x;
-		this.players[pseudo].model.position.y = 0;
+		// this.players[pseudo].model.position.y = this.yPos;
 		this.players[pseudo].model.position.z = position.z;
 		this.players[pseudo].model.rotation.y = position.ry;
 	}

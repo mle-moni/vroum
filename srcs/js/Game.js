@@ -50,7 +50,7 @@ class Game {
 		}
 		let bullet = engine.shotController.updatePos(dt);
 		if (bullet) {
-			if (bullet.type === "red") {
+			if (bullet.type === "red" && bullet.shooter !== this.pseudo) {
 				engine.player.physics.slow(0.5);
 			} else {
 				this.socket.emit("gameAction", "hit", {
@@ -62,18 +62,23 @@ class Game {
 
 		if (keyboard.shootRed && engine.shotController.clientCanShoot("red")) {
 			engine.shotController.clientSetTimer("red");
+			const position = new THREE.Vector3();
+			engine.player.hitbox.spheres[6].getWorldPosition(position);
+			position.y = 1.3;
 			this.socket.emit("gameAction", "shot", {
 				type: "red",
-				position: engine.player.model.position.clone(),
+				position,
 				angle: engine.player.model.rotation.y
 			});
 		}
 
 		if (keyboard.shootBlue && engine.shotController.clientCanShoot("blue")) {
 			engine.shotController.clientSetTimer("blue");
+			const position = engine.player.model.position.clone();
+			position.y = 1.3;
 			this.socket.emit("gameAction", "shot", {
 				type: "blue",
-				position: engine.player.model.position.clone(),
+				position,
 				angle: engine.player.model.rotation.y
 			});
 		}
@@ -91,6 +96,9 @@ class Game {
 			keyboard.camera2 = true;
 		}
 		this.updateMinimap();
+		if (this.engine.player.stayInMap()) {
+			this.toast.alert("Stay in the map!");
+		}
 	}
 	cameras() {
 		const engine = this.engine;
@@ -111,23 +119,23 @@ class Game {
 		if (cameraView === 1 && !camLock) { // lock camera to player movements
 			camLock = true;
 			playerModel.add(engine.camera);
-			engine.camera.position.set(0, 20, -15);
+			engine.camera.position.set(0, 20, -1.5);
 			engine.camera.rotation.set(0, 0, 0);
 		}
 		if (cameraView !== 1 && camLock) { // unlock camera from player for others camera views
 			camLock = false;
 			playerModel.remove(engine.camera);
-			engine.camera.position.y = 300;
+			engine.camera.position.y = 30.0;
 			engine.camera.position.x = engine.player.model.position.x;
 			engine.camera.position.z = engine.player.model.position.z;
 		}
 		if (cameraView === 2) {
 			let tmpPos = engine.player.model.position.clone();
-			engine.camera.position.y = 50;
+			engine.camera.position.y = 5.0;
 			const timeDiff = Date.now() - this.playerWallHitTime;
 			if (timeDiff < 400) {
-				tmpPos.x -= this.speedBeforeCrash.x * 100;
-				tmpPos.z -= this.speedBeforeCrash.z * 100;
+				tmpPos.x -= this.speedBeforeCrash.x * 120;
+				tmpPos.z -= this.speedBeforeCrash.z * 120;
 				this.speedBeforeCrash.x *= 0.9;
 				this.speedBeforeCrash.z *= 0.9;
 			} else {
@@ -135,13 +143,13 @@ class Game {
 				if (timeFactor > 1 || timeFactor < 0) {
 					timeFactor = 1;
 				}
-				tmpPos.x -= (engine.player.physics.translationSpeed.x * 100) * timeFactor;
-				tmpPos.z -= (engine.player.physics.translationSpeed.z * 100) * timeFactor;
+				tmpPos.x -= (engine.player.physics.translationSpeed.x * 120) * timeFactor;
+				tmpPos.z -= (engine.player.physics.translationSpeed.z * 120) * timeFactor;
 				this.speedBeforeCrash.x = engine.player.physics.translationSpeed.x;
 				this.speedBeforeCrash.z = engine.player.physics.translationSpeed.z;
 			}
-			tmpPos.x += Math.sin(engine.player.model.rotation.y) * 100;
-			tmpPos.z += Math.cos(engine.player.model.rotation.y) * 100;
+			tmpPos.x += Math.sin(engine.player.model.rotation.y) * 10.0;
+			tmpPos.z += Math.cos(engine.player.model.rotation.y) * 10.0;
 			engine.camera.position.x = tmpPos.x;
 			engine.camera.position.z = tmpPos.z;
 		} else if (cameraView === 3) {
@@ -149,12 +157,12 @@ class Game {
 	
 			engine.camera.position.x -= posDiff.x / 40;
 			engine.camera.position.z -= posDiff.z / 40;
-			engine.camera.position.y = 200;
+			engine.camera.position.y = 20;
 		} else if (cameraView === 4) {
 			if (oldPositions.length > 20) {
 				engine.camera.position.x = oldPositions[0][0];
 				engine.camera.position.z = oldPositions[0][1];
-				engine.camera.position.y = 1000;
+				engine.camera.position.y = 100;
 			}
 		}
 		if (oldPositions.length > 20) {
