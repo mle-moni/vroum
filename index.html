@@ -21,7 +21,7 @@ Copyright 2020 LE MONIES DE SAGAZAN Mayeul
     <meta charset="utf-8">
     <title>VROUM</title>
     <script src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" type="text/css" href="srcs/style/main.css">
+    <link rel="stylesheet" type="text/css" href="srcs/style/homepage.css">
     <link rel="stylesheet" type="text/css" href="srcs/style/bindings-settings.css">
 	<link rel="icon" type="image/png" href="icon.png" />
     <script>
@@ -29,22 +29,37 @@ Copyright 2020 LE MONIES DE SAGAZAN Mayeul
 	</script>
 	<script src="srcs/js/socket.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/siiimple-toast/dist/style.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/siiimple-toast/dist/siiimple-toast.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/siiimple-toast/dist/siiimple-toast.min.js"></script>
 	<script src="libs/three.min.js"></script>
-	<script src="libs/GLTFLoader.js"></script>
-	<script src="srcs/js/socket.js"></script>
-	<script>
-		const socket = io.connect(location.origin);
-		connectSocket(socket);
-		// si tu veux mettre ca dans un fichier a part, fais toi plaisir :)
-	</script>
+    <script src="libs/GLTFLoader.js"></script>
+    <script src="srcs/js/socket.js"></script>
+    <script src="../srcs/js/game_engine/CarPhysics.js"></script>
+    <script src="../srcs/js/game_engine/Car.js"></script>
+    <script src="../srcs/js/game_engine/Collider.js"></script>
+    <script src="../srcs/js/game_engine/MapLoader.js"></script>
+    <script src="../srcs/js/game_engine/Engine.js"></script>
+    <script src='../srcs/js/maps/homepageMap.js'></script>
+	<script src="srcs/js/homepage.js"></script>
 </head>
 <body>
-	<h2>prochainement ici :</h2>
-	<ul>
-		<li>le selecteur de room</li>
-		<li>le selecteur de skins</li>
-	</ul>
+	<div id="homepage-panel">
+        <div>
+            <p>Logged as </p>
+            <h2 id="logged-as"></h2>
+        </div>
+        <form>
+            <div>
+                <label id='input-room-id-label' for='input-room-id'>Room ID</label>
+                <input id='input-room-id' name='input-room-id' type="text" placeholder="Enter room ID">
+            </div>
+            <div>
+                <label id='input-skin-label' for='input-skin' placeholder="test">Skin</label>
+                <select id='input-skin' name='input-skin'>
+            </select>
+            </div>
+        </form>
+        <button id="join-session">Go !</button>
+    </div>
 </body>
 
 </html>

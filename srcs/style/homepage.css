@@ -1,4 +1,9 @@
-#controls-settings
+body {
+    margin: 0px;
+    height: 100%;
+}
+
+#homepage-panel
 {
     position: absolute;
     width: 40%;
@@ -15,21 +20,22 @@
     -moz-border-radius-bottomright: 25px;
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
-    padding-left: 20px
+    padding-left: 20px;
+    vertical-align: center;
 }
 
-.control-box
+canvas
 {
-    margin-right: auto;
-    margin-left: auto;
-    padding: 5px;
-    display: flex;
-    width: 50%;
-    justify-content: space-between;
-    align-items: center;
+    position: absolute;
+    top: 0;
+    left:0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    z-index: -1;
 }
 
-.control-label
+form div
 {
-    color: white;
+    padding-bottom: 20px;
 }
