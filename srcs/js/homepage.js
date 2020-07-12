@@ -56,7 +56,7 @@ class HomeView {
 	cameras() {
 		const engine = this.engine;
         const playerModel = engine.player.model;
-        const cameraPos = new THREE.Vector3( -20, 20, 40 );
+        const cameraPos = new THREE.Vector3( -20*world_scale, 20*world_scale, 40*world_scale );
         
 
         playerModel.position.set(20*100/2, 5, 20*100/2);
